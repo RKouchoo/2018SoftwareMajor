@@ -18,40 +18,23 @@ public class Main {
 	public static final String[] COMMAND_ARRAY = new String[] {"echo", "ping", "hi"};
 	public static final List<String> COMMAND_LIST = Arrays.asList(COMMAND_ARRAY);
 	
+	public static enum currentThreadState {
+		KILLED,
+		ALIVE,
+		RUNNING_COMMAND,
+		AWAITING_COMMAND
+	}
+	
 	public static void main(String[] args) throws IOException {
 		
 		// Enter data using a buffered reader for the console
-		reader = new BufferedReader(new InputStreamReader(System.in));
+		reader = new BufferedReader(new InputStreamReader(System.in));		
 		
-		// Create a new thread to handle input reading
-		readerThread = new Thread(new Runnable() {
-	         @Override
-	         public void run()  {
-	        	 while (command == lastCommand) {
-	        		 try {
-	        			 command = read();
-	        			 lastCommand = command;
-	        		 } catch (IOException ex) {
-	        			 System.out.println(ex);
-	        		 }	
-	     		}	 
-	         }
-	});		
-		
-		commandHandlerThread = new Thread(new Runnable() {
-	         @Override
-	         public void run() {
-	        	 try {
-					updateCommandHandler(command);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	         }
-		});
+		createReaderThread();
+		createCommandHandlerThread();
 		
 		readerThread.start();
 		commandHandlerThread.start();
-		
 	}
 	
 	public static String read() throws IOException {
@@ -62,13 +45,64 @@ public class Main {
 	public static void updateCommandHandler(String command) throws IOException {
 		
 		if (COMMAND_LIST.contains(command)) {
-			System.out.println("true");
+			System.out.println("> true \n");
+			System.out.println("\n");
 		} else {
-			 System.out.println("Invalid command: " + command);
+			 System.out.println("> Invalid command: " + command);
 		}
 		
 		
 	}
+	
+	public static currentThreadState pokeThreads() {
+		if (!readerThread.isAlive()) {
+			readerThread.start();
+			return currentThreadState.KILLED;
+		}
+		
+		if (!commandHandlerThread.isAlive()) {
+			commandHandlerThread.start();
+			return currentThreadState.KILLED;
+		} else {
+			return currentThreadState.AWAITING_COMMAND;
+		}
+	}
+	
+	private static void createReaderThread() {
+		// Create a new thread to handle input reading
+		readerThread = new Thread(new Runnable() {
+	         @Override
+	         public void run()  {
+	        	 while(true) {
+	        		 	try {
+	        			 	command = read();
+	        			 	lastCommand = command;
+	        			 	updateCommandHandler(command);
+	        		 	} catch (IOException ex) {
+	        			 	System.out.println(ex);
+	        		 	}	
+	        	}
+	         }
+		});
+		
+	}
+	
+	private static void createCommandHandlerThread() {
+		// Create a thread to handle commands when they are sent around the statemachine
+		commandHandlerThread = new Thread(new Runnable() {
+			@Override
+        	public void run() {
+       	 	try {
+					updateCommandHandler(command);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+        	}
+		});
+	
+	}
+	
+	
 	
 	
 }
