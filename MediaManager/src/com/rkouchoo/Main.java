@@ -13,15 +13,17 @@ import java.util.Arrays;
 public class Main {
 
 	private static BufferedReader reader;
-	private static String lastCommand;
-	private static String command = "";
-
 	private static Thread readerThread;
 	private static Thread commandHandlerThread;
 	private static Thread webServerThread;
+	
+	private static WebServer server;
 
 	public static final String[] COMMAND_ARRAY = new String[] { "start", "reload", "stop", "edit", "addurl" };
 	public static final List<String> COMMAND_LIST = Arrays.asList(COMMAND_ARRAY);
+	
+	public static String currentCommand = "";
+	public static Boolean killed = true;
 
 	public static enum currentThreadState {
 		KILLED, 
@@ -40,27 +42,37 @@ public class Main {
 		createCommandHandlerThread();
 		createWebServerThread();
 
-		readerThread.start();
+		//readerThread.start();
 		commandHandlerThread.start();
-		webServerThread.start();
-
+		
+		//webServerThread.start();
 	}
 
-	public static String read() throws IOException {
-		command = reader.readLine();
-		return command;
+	public static String read() {
+		try {
+			return reader.readLine();	
+		} catch (IOException e) {
+			System.out.println("Could not read the console!");
+		}
+		return null;
 	}
 
-	public static void updateCommandHandler(String command) throws IOException {
-
+	public static void updateCommandHandler(String command) { 
+		// Convert the input string to a list so we can be able to compare it easier.
+		String[] tempArray = {command};
+		List<String> tempCommand = Arrays.asList(tempArray);
 		if (COMMAND_LIST.contains(command)) {
-			System.out.println("> true");
-		} else {
-			if (command == "") {
-				return;
-			} else {
-				System.out.println("> Invalid command: " + command + "\n> ");
-				System.out.println(command);
+			for (int i = 0; i < COMMAND_LIST.size(); i++) {
+				if (tempCommand.contains(COMMAND_LIST.get(i))) {	
+					if (i == 0) {
+						startWebServer();		
+						return;	
+					} else if (i == 1) {
+						System.out.println("Reloading program!");
+					} else if (i == 2) {
+						System.out.println("Cannot stop web server due to a new java depreciation. Please kill the process instead by closing the console!");
+					}
+				}				
 			}
 		}
 	}
@@ -85,15 +97,10 @@ public class Main {
 		readerThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (true) { // Main command poller, ugly and thread locks but it whould work
-					try {
-						command = read();
-						lastCommand = command;
-						updateCommandHandler(command);
-					} catch (IOException ex) {
-						System.out.println(ex);
-					}
+				while (true) {
+					currentCommand = read();
 				}
+			
 			}
 		});
 
@@ -104,10 +111,9 @@ public class Main {
 		commandHandlerThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					updateCommandHandler(command);
-				} catch (IOException ex) {
-					ex.printStackTrace();
+				while (true) {
+					System.out.println(read());
+					updateCommandHandler(read());		
 				}
 			}
 		});
@@ -121,18 +127,22 @@ public class Main {
 			public void run() {
 				// start the web server
 				try {
-					WebServer server = new WebServer("", 80);
+					server = new WebServer("", 80);
 					server.activate();
 				} catch (WebServerException e) {
 					System.out.println(e.toString());
 				}
 			}
 		});
-
 	}
 
 	public void printConsolePin() {
 		System.out.print("\n >");
 	}
-
+	
+	public static void startWebServer() {
+			webServerThread.start();
+			System.out.println("Started web server!");
+			System.out.println("Cannot start the webserver multiple times!");
+	}
 }
