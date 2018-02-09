@@ -1,21 +1,26 @@
 package com.rkouchoo.command;
 
-import java.util.List;
-
 import com.rkouchoo.interfaces.CommandExecutorInterface;
+import com.rkouchoo.webserver.WebServer;
 
 public class CommandExecutor implements CommandExecutorInterface {
-
-	@Override
-	public void register(List commandList) {
-		
+	
+	WebServer localWebServer;
+	ConsoleReader localConsoleReader;
+	
+	public CommandExecutor(ConsoleReader consoleReader, WebServer server) {
+		this.localWebServer = server;
+		this.localConsoleReader = consoleReader;
 	}
 
 	@Override
-	public void registerCommand(CommandList command) {
+	public CommandExecutorInterface setLocalStatus(localCommandStatus commandStatus) {
+		
+		return this;
+	}
+
+	@Override
+	public void executeCommand(CommandList command) {
 		
 	}
-	
-	
-
 }
