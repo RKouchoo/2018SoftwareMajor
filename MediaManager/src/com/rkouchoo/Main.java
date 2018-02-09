@@ -9,11 +9,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-@SuppressWarnings("unused")
 public class Main {
 	
 	private static Thread commandThread;
 	private static BufferedReader reader;
+	private static InputStreamReader inputStream;
 	
 	private static WebServer server;
 	private static CommandExecutor commandExecutor;
@@ -24,19 +24,34 @@ public class Main {
 		/**
 		 * Create the modules and objects needed for the program to run.
 		 */
-		reader = new BufferedReader(new InputStreamReader(System.in));
+		inputStream = new InputStreamReader(System.in);
+		reader = new BufferedReader(inputStream);
 		
 		server = new WebServer(Constants.WEB_SERVER_LOCATION, Constants.WEB_SERVER_PORT);
 		consoleReader = new ConsoleReader(reader);
 		commandExecutor = new CommandExecutor(consoleReader, server);
 		
+		createCommandExecutorThread();
+		
 		/**
 		 * Start running the program after everything has been created.
 		 */
 		
+		commandThread.start();
+		
 	}
 	
-	public void createCommandExecutorThread() {
-		
+	public static void createCommandExecutorThread() {
+		commandThread = new Thread(new Runnable() {
+			boolean running = true;
+			
+			@Override
+			public void run() {
+				while (running) {
+					commandExecutor.query();
+					running = commandExecutor.getProgramStatus();
+				}
+			}
+		});
 	}
 }
