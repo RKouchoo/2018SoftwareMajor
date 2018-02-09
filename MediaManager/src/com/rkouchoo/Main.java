@@ -10,6 +10,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
+/**
+ * This is the original command interface prototype method.
+ * Not going to be used anymore as there is a current redesing in progress.
+ * 
+ * @author KOUC01
+ *
+ */
+
 public class Main {
 
 	private static BufferedReader reader;
