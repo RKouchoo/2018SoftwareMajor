@@ -55,7 +55,7 @@ public class ConsoleReader implements ConsoleReaderInterface {
 		return currentInputStringSupplier;
 	}
 	
-	public WantedStringSupplier getLast() {
+	public WantedStringSupplier getLastSupplier() {
 		return this.lastInputStringSupplier;
 	}
 	

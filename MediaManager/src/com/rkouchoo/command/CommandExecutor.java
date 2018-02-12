@@ -28,6 +28,7 @@ public class CommandExecutor implements CommandExecutorInterface {
 					executeCommand(setCommand);
 				}
 			}
+			localConsoleReader.getSupplier().clearAll();
 		}
 	}
 
@@ -46,23 +47,27 @@ public class CommandExecutor implements CommandExecutorInterface {
 	public void executeCommand(CommandList command) {
 		switch (command) {
 		case ADD:
-						
+				System.out.println("add --!");		
 			break;
 			
 		case ECHO:
-			
+			System.out.println("echp --!");
 			break;
 			
 		case RELOAD:
-			
+			System.out.println("reload --!");
 			break;
 			
 		case START:
-			
+			System.out.println("start --!");
 			break;
 			
 		case STOP:
+			System.out.println("stop --!");
+			break;
 			
+		case EXIT:
+			System.out.println("exit --!");
 			break;
 			
 		default:

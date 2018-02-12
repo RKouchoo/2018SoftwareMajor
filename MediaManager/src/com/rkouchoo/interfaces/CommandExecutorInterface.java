@@ -8,14 +8,16 @@ public interface CommandExecutorInterface {
 	String reload = "reload";
 	String add = "add";
 	String echo = "echo";
+	String exit = "exit";
 	
 	// enum for passing around commands. you can get the literal by calling getNativeCommand()
 	public static enum CommandList {
 		START (start),
-		RELOAD (stop),
-		STOP (reload),
+		RELOAD (reload),
+		STOP (stop),
 		ADD (add),
-		ECHO (echo); // as a test command to see if the server is responding!
+		ECHO (echo),
+		EXIT (exit); // as a test command to see if the server is responding!
 		
 		private final String command;
 		

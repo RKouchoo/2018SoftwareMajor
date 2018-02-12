@@ -4,9 +4,9 @@ import com.rkouchoo.interfaces.WantedStringSupplierInterface;
 
 public class WantedStringSupplier implements WantedStringSupplierInterface {
 
-	private String args = "";
-	private String command = "";
-	private String raw = "";
+	private String args = null;
+	private String command = null;
+	private String raw = null;
 	
 	private boolean isCommandOnly = false;
 	
@@ -52,6 +52,15 @@ public class WantedStringSupplier implements WantedStringSupplierInterface {
 	@Override
 	public boolean isCommandOnly() {
 		return isCommandOnly;
+	}
+
+	@Override
+	public WantedStringSupplierInterface clearAll() {
+		this.command = null;
+		this.args = null;
+		this.raw = null;
+		this.isCommandOnly = false;
+		return this;
 	}
 
 }

@@ -18,4 +18,6 @@ public interface WantedStringSupplierInterface {
 	
 	public boolean isCommandOnly();
 	
+	public WantedStringSupplierInterface clearAll();
+	
 }
