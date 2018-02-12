@@ -1,6 +1,5 @@
 package com.rkouchoo.interfaces;
 
-@SuppressWarnings("unused")
 public interface CommandExecutorInterface {
 	
 	// The literal implementations of what the user will input.
@@ -10,7 +9,7 @@ public interface CommandExecutorInterface {
 	String add = "add";
 	String echo = "echo";
 	
-	// binding those inputs to an enum. you can get the literal by calling getNativeCommand()
+	// enum for passing around commands. you can get the literal by calling getNativeCommand()
 	public static enum CommandList {
 		START (start),
 		RELOAD (stop),
@@ -29,7 +28,7 @@ public interface CommandExecutorInterface {
 		 }
 	}
 	
-	public static enum localCommandStatus {
+	public static enum LocalCommandStatus {
 		STARTING,
 		IDLE,
 		RUNNING,
@@ -42,7 +41,7 @@ public interface CommandExecutorInterface {
 		IO_ERROR
 	}
 	
-	CommandExecutorInterface setLocalStatus(localCommandStatus commandStatus);
+	CommandExecutorInterface setLocalStatus(LocalCommandStatus commandStatus);
 
 	public void executeCommand(CommandList command);
 		

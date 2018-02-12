@@ -2,76 +2,61 @@ package com.rkouchoo.command;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
-public class ConsoleReader {
+import com.rkouchoo.interfaces.ConsoleReaderInterface;
+
+public class ConsoleReader implements ConsoleReaderInterface {
 
 	 BufferedReader reader;
+	 
+	 private WantedStringSupplier lastInputStringSupplier;
+	 private WantedStringSupplier currentInputStringSupplier;
 	
 	/**
-	 * A class that reads the console to forward backend commands around the program for the web server. 
+	 * A class that reads the console to forward back end commands around the program for the web server. 
 	 * @param reader
 	 */
 	public ConsoleReader(BufferedReader reader) {
 		this.reader = reader;
+		lastInputStringSupplier = new WantedStringSupplier();
+		currentInputStringSupplier = new WantedStringSupplier();
 	}
 	
 	/**
 	 * Returns the latest user input from the program
 	 * @return string input
 	 */
-	public String get(int timeout) {
-		/*Scanner s = new Scanner(reader);
-		ExecutorService executor = Executors.newCachedThreadPool();
-		
-		Callable<Object> task = new Callable<Object>() {
-			public Object call() {
-				try {
-					return reader.readLine();
-				} catch (IOException e) {
-					// handle IO e
-				} 
-				return null;
-			}
-		};
+	@Override
+	public WantedStringSupplier getSupplier() {	
+		String line = null;
 		
 		try {
-			
-			if (reader.ready()) {
-			
-				try {
-					System.out.println(s.next());
-					return reader.readLine();
-				} catch (Exception e) {
-					
+			while(reader.ready() && (line = reader.readLine()) != null) {
+				if (line.split(" ").length > 1) {
+					currentInputStringSupplier
+						.setCommand(line.split(" ")[0])
+						.setArgs(line.split(" ")[1])
+						.setRaw(line)
+						.setCommandOnly(false);		
+				} else {
+					currentInputStringSupplier
+						.setCommand(line)
+						.setRaw(line)
+						.setCommandOnly(true);
 				}
 				
-			} else {
-				
-				Future<Object> future = executor.submit(task);
-				try {
-					Object result = future.get(timeout, TimeUnit.MILLISECONDS);
-				} catch (TimeoutException e) {
-				} catch (InterruptedException e) {
-				} catch (ExecutionException e) {
-				} finally {
-					future.cancel(true);
-				}	
 			}
 		} catch (IOException e) {
-			return null;
-		} */
-		
-		String line;
-		while(reader.ready() && (line = reader.readLine()) != null) {
-		    System.out.println(line);
+			System.out.println("[FATAL] Unable to read the console: " + e);
 		}
+		
+		this.lastInputStringSupplier = currentInputStringSupplier;
+		
+		return currentInputStringSupplier;
 	}
+	
+	public WantedStringSupplier getLast() {
+		return this.lastInputStringSupplier;
+	}
+	
 }
