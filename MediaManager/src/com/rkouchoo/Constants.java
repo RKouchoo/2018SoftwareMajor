@@ -7,5 +7,8 @@ public class Constants {
 	public static final String WEB_SERVER_LOCATION = "";
 	
 	// Console constants.
-	public static final String CONSOLE_UI_PRINT = "\n>";
+	public static final String CONSOLE_UI_PRINT = "> ";
+	public static final String COMMAND_SPLIT_TERM = " ";
+	public static String CONSOLE_ERROR_MESSAGE = "Unable to find command: ";
+	public static final String COMMAND_HELP_MESSAGE = " use '?' or 'help' to view commands";
 }

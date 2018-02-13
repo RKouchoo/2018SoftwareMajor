@@ -11,8 +11,8 @@ public class CommandExecutor implements CommandExecutorInterface {
 	
 	private CommandList setCommand;
 	
-	private String cOutput = "";
-	
+	private String consoleOutput = "";
+		
 	public CommandExecutor(ConsoleReader consoleReader, WebServer server) {
 		this.localWebServer = server;
 		this.localConsoleReader = consoleReader;
@@ -21,14 +21,18 @@ public class CommandExecutor implements CommandExecutorInterface {
 	@Override
 	public void query() {
 		if (localConsoleReader.getSupplier().getRaw() != null) {
-			System.out.println(cOutput + Constants.CONSOLE_UI_PRINT);
 			for (CommandList commandLocal : CommandList.values()) {
 				if (localConsoleReader.getSupplier().getCommand().equalsIgnoreCase(commandLocal.getNativeCommand())) {
 					setCommand = commandLocal;
 					executeCommand(setCommand);
+					localConsoleReader.getSupplier().clearAll();
+					System.out.println(Constants.CONSOLE_UI_PRINT + consoleOutput);
+					return;
 				}
 			}
+			consoleOutput = Constants.CONSOLE_ERROR_MESSAGE + localConsoleReader.getSupplier().getRaw() + Constants.COMMAND_HELP_MESSAGE;	
 			localConsoleReader.getSupplier().clearAll();
+			System.out.println(Constants.CONSOLE_UI_PRINT + consoleOutput);
 		}
 	}
 
@@ -47,27 +51,27 @@ public class CommandExecutor implements CommandExecutorInterface {
 	public void executeCommand(CommandList command) {
 		switch (command) {
 		case ADD:
-				System.out.println("add --!");		
+				this.consoleOutput = "add --!";		
 			break;
 			
 		case ECHO:
-			System.out.println("echp --!");
+			this.consoleOutput = "echo --!";
 			break;
 			
 		case RELOAD:
-			System.out.println("reload --!");
+			this.consoleOutput = "reload --!";
 			break;
 			
 		case START:
-			System.out.println("start --!");
+			this.consoleOutput = "start --!";
 			break;
 			
 		case STOP:
-			System.out.println("stop --!");
+			this.consoleOutput = "stop --!";
 			break;
 			
 		case EXIT:
-			System.out.println("exit --!");
+			this.consoleOutput = "exit --!";
 			break;
 			
 		default:

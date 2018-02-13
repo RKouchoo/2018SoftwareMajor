@@ -3,11 +3,12 @@ package com.rkouchoo.command;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import com.rkouchoo.Constants;
 import com.rkouchoo.interfaces.ConsoleReaderInterface;
 
 public class ConsoleReader implements ConsoleReaderInterface {
 
-	 BufferedReader reader;
+	 private BufferedReader reader;
 	 
 	 private WantedStringSupplier lastInputStringSupplier;
 	 private WantedStringSupplier currentInputStringSupplier;
@@ -32,10 +33,10 @@ public class ConsoleReader implements ConsoleReaderInterface {
 		
 		try {
 			while(reader.ready() && (line = reader.readLine()) != null) {
-				if (line.split(" ").length > 1) {
+				if (line.split(Constants.COMMAND_SPLIT_TERM).length > 1) {
 					currentInputStringSupplier
-						.setCommand(line.split(" ")[0])
-						.setArgs(line.split(" ")[1])
+						.setCommand(line.split(Constants.COMMAND_SPLIT_TERM)[0])
+						.setArgs(line.split(Constants.COMMAND_SPLIT_TERM)[1])
 						.setRaw(line)
 						.setCommandOnly(false);		
 				} else {
