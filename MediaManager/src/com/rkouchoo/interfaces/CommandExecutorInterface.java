@@ -9,6 +9,8 @@ public interface CommandExecutorInterface {
 	String add = "add";
 	String echo = "echo";
 	String exit = "exit";
+	String help = "help";
+	String qMark = "?";
 	
 	// enum for passing around commands. you can get the literal by calling getNativeCommand()
 	public static enum CommandList {
@@ -16,8 +18,10 @@ public interface CommandExecutorInterface {
 		RELOAD (reload),
 		STOP (stop),
 		ADD (add),
-		ECHO (echo),
-		EXIT (exit); // as a test command to see if the server is responding!
+		ECHO (echo), // as a test command to see if the console is responding!
+		EXIT (exit),
+		HELP (help),
+		QMARK (qMark); 
 		
 		private final String command;
 		
@@ -45,7 +49,7 @@ public interface CommandExecutorInterface {
 	
 	CommandExecutorInterface setLocalStatus(LocalCommandStatus commandStatus);
 
-	public void executeCommand(CommandList command);
+	public void executeCommand(CommandList command, String args, boolean isCommandOnly);
 		
 	public void query();
 	

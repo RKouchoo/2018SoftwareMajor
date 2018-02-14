@@ -3,15 +3,12 @@ package com.rkouchoo.command.doCommand;
 import com.rkouchoo.command.CommandExecutor;
 import com.rkouchoo.interfaces.DoCommandInterface;
 
-public class DoEcho implements DoCommandInterface {
-	
-	public DoEcho() {
-		
-	}
+public class DoExit implements DoCommandInterface {
 
 	@Override
 	public String run(String args, CommandExecutor exec) {
-		return args;
+		exec.stopSystemLoop();
+		return "Exiting program!";
 	}
-	
+
 }

@@ -11,4 +11,5 @@ public class Constants {
 	public static final String COMMAND_SPLIT_TERM = " ";
 	public static String CONSOLE_ERROR_MESSAGE = "Unable to find command: ";
 	public static final String COMMAND_HELP_MESSAGE = " use '?' or 'help' to view commands";
+	public static final String CONSOLE_NULL_ARGUMENT = "Invalid argument: 'null'";
 }
