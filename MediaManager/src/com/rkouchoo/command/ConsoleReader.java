@@ -27,10 +27,13 @@ public class ConsoleReader implements ConsoleReaderInterface {
 	
 	/**
 	 * Returns the latest user input from the program and stores it to a string supplier.
+	 * 
+	 *  Misleading title, does multiple functions and is a lie!!!!
+	 * 
 	 * @return string input
 	 */
 	@Override
-	public WantedStringSupplier getSupplier() {	// Misleading title, does multiple functions
+	public WantedStringSupplier getSupplier() {	
 		String line = null;
 		
 		try {

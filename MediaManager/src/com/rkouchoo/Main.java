@@ -24,12 +24,17 @@ public class Main {
 		/**
 		 * Create the modules and objects needed for the program to run.
 		 */
+		
 		inputStream = new InputStreamReader(System.in);
 		reader = new BufferedReader(inputStream);
 		
 		server = new WebServer(Constants.WEB_SERVER_LOCATION, Constants.WEB_SERVER_PORT);
 		consoleReader = new ConsoleReader(reader);
 		commandExecutor = new CommandExecutor(consoleReader, server);
+		
+		/**
+		 * Set up the threads that are going to be used by the program.
+		 */
 		
 		createCommandExecutorThread();
 		
@@ -51,6 +56,7 @@ public class Main {
 					commandExecutor.query();
 					running = commandExecutor.getProgramStatus();
 				}
+				System.err.println("Exited Gracefully");
 			}
 		});
 	}

@@ -4,6 +4,7 @@ import com.rkouchoo.Constants;
 import com.rkouchoo.command.doCommand.DoAdd;
 import com.rkouchoo.command.doCommand.DoEcho;
 import com.rkouchoo.command.doCommand.DoExit;
+import com.rkouchoo.command.doCommand.DoHelp;
 import com.rkouchoo.command.doCommand.DoReload;
 import com.rkouchoo.command.doCommand.DoStart;
 import com.rkouchoo.command.doCommand.DoStop;
@@ -24,6 +25,7 @@ public class CommandExecutor implements CommandExecutorInterface {
 	private DoStart doStart;
 	private DoStop doStop;
 	private DoExit doExit;
+	private DoHelp doHelp;
 		
 	private boolean exitStatus = true;
 	
@@ -37,6 +39,7 @@ public class CommandExecutor implements CommandExecutorInterface {
 		doStart = new DoStart();
 		doStop = new DoStop();
 		doExit = new DoExit();
+		doHelp = new DoHelp();
 	}
 
 	@Override
@@ -58,7 +61,7 @@ public class CommandExecutor implements CommandExecutorInterface {
 				}
 			}
 			
-			consoleOutput = Constants.CONSOLE_ERROR_MESSAGE + localConsoleReader.getSupplier().getRaw() + Constants.COMMAND_HELP_MESSAGE;	
+			consoleOutput = Constants.CONSOLE_ERROR_MESSAGE + "'" + localConsoleReader.getSupplier().getRaw() + "'" + Constants.COMMAND_HELP_MESSAGE;	
 			localConsoleReader.getSupplier().clearAll();
 			System.out.println(Constants.CONSOLE_UI_PRINT + consoleOutput);
 	
@@ -120,13 +123,21 @@ public class CommandExecutor implements CommandExecutorInterface {
 			this.consoleOutput = "exit --!" + doExit.run(args, this);
 			break;
 			
+		case HELP:
+			this.consoleOutput = doHelp.run(null, null);
+			break;
+			
+		case QMARK:
+			this.consoleOutput = doHelp.run(null, null);
+			break;
+			
 		default:
 			break;
 		}
 			
 	}
 	
-	// Set the boolean that Main.java queries when it runs the main thread.
+	// Set the boolean that Main.java queries when it runs the query thread.
 	public void stopSystemLoop() {
 		this.exitStatus = false;
 	}
