@@ -6,19 +6,14 @@ import java.awt.GridLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Container;
-import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 
-import org.apache.commons.io.FilenameUtils;
-
 import javax.swing.table.*;
 import javax.swing.filechooser.FileSystemView;
-import javax.imageio.ImageIO;
-
 import com.rkouchoo.fm.actions.ActionManager;
 import com.rkouchoo.fm.file.FileTableModel;
 import com.rkouchoo.fm.file.FileTreeCellRenderer;
@@ -26,12 +21,7 @@ import com.rkouchoo.util.ImageLoader;
 
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
-
 import java.io.*;
-import java.nio.channels.FileChannel;
-
-import java.net.URL;
 
 public class MediaManager {
 	
