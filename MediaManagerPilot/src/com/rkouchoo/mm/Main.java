@@ -16,11 +16,11 @@ public class Main {
 				ManagerBackend mediaManager = new ManagerRunner();
 				
 				JFrame frame = new JFrame(Constants.WINDOW_TITLE);
-							
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
-				frame.setContentPane(((ManagerRunner) mediaManager).getUIPanel());
 				mediaManager.setSystemLookAndFeel();
 				mediaManager.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PROJECT_PATH);
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
+				frame.setContentPane(((ManagerRunner) mediaManager).getUIPanel());
+				
 				mediaManager.showRootFile();
 
 				frame.pack();
