@@ -1,30 +1,26 @@
 package com.rkouchoo.mm.actions;
 
 import com.rkocuhoo.mm.interfaces.ActionManagerInterface;
-import com.rkouchoo.mm.ManagerBackend;
-import com.rkouchoo.mm.MediaManager;
+import com.rkouchoo.mm.management.ManagerBackend;
+import com.rkouchoo.mm.management.MediaManager;
 import com.rkouchoo.mm.util.MessageUtil;
 
 public class ActionManager implements ActionManagerInterface {
 
-	private MediaManager manager;
-	private boolean hasConstructed;
-	
+	private ManagerBackend manager;	
 	private RenameFileAction rename;
 	private DeleteFileAction delete;
 	private NewFileAction newFile;
 	
 	private MessageUtil messenger;
 	
-	public ActionManager(MediaManager man, MessageUtil messenger) {
+	public ActionManager(ManagerBackend man, MessageUtil messenger) {
 		this.manager = man;
 		this.messenger = messenger;
 		
 		rename = new RenameFileAction(this);
 		delete = new DeleteFileAction(this);
 		newFile = new NewFileAction(this);
-		
-		hasConstructed = true;
 	}
 	
 	@Override
@@ -43,23 +39,13 @@ public class ActionManager implements ActionManagerInterface {
 	}
 
 	@Override
-	public MediaManager getManager() {
-		if (hasConstructed) {
-			return manager;
-		} else {
-			return null;
-			// Should return mock manager! which needs to be created.
-		}
+	public ManagerBackend getMediaManager() {
+		return manager;
 	}
 
 	@Override
 	public MessageUtil getMessenger() {
 		return messenger;
-	}
-
-	@Override
-	public ManagerBackend getBackend() {
-		return getManager().backend;
 	}
 
 }

@@ -1,13 +1,8 @@
-package com.rkouchoo.mm;
+package com.rkouchoo.mm.management;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Container;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.filechooser.FileSystemView;
@@ -15,11 +10,14 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 
 import com.rkouchoo.mm.actions.ActionManager;
-import com.rkouchoo.mm.file.FileSystemRoot;
 import com.rkouchoo.mm.file.FileTableModel;
-import com.rkouchoo.mm.file.FileTreeCellRenderer;
 import com.rkouchoo.mm.util.MessageUtil;
 
+/**
+ * Class to hold all of the variables, overkill but was my only solution
+ * @author KOUC01
+ *
+ */
 public class MediaManager {
 	
 	protected Desktop desktop;
@@ -60,33 +58,9 @@ public class MediaManager {
 	public DefaultTreeModel treeModel;
 	
 	public ActionManager actionManager;
-	public ManagerBackend backend;
-
 	public MessageUtil messenger;
 	
 	public MediaManager() {
-		messenger = new MessageUtil(uiPanel);
-		actionManager = new ActionManager(this, messenger);		
-	}
-	
-	@SuppressWarnings("unused")
-	private void createBackEndWhenReady() {
-		backend = new ManagerBackend();
-	}
-	
-	/**
-	 * A getter that allows you to get the manager.
-	 * @return
-	 */
-	public MediaManager returnSelf() {
-		return this;
-	}
-	
-	public MessageUtil getMessenger() {
-		return messenger;
-	}
-	
-	public ActionManager getActionManager() {
-		return actionManager;
+
 	}
 }

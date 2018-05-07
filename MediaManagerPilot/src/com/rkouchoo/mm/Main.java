@@ -3,6 +3,9 @@ package com.rkouchoo.mm;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import com.rkouchoo.mm.management.ManagerBackend;
+import com.rkouchoo.mm.management.ManagerRunner;
+
 public class Main {
 
 	/**
@@ -27,7 +30,6 @@ public class Main {
 				frame.setLocationByPlatform(Constants.WINDOW_NATIVE_LOCATION);
 				frame.setMinimumSize(frame.getSize());
 				frame.setVisible(true);
-				
 			}
 		});
 	}

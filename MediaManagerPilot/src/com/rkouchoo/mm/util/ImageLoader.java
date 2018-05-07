@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.rkouchoo.mm.MediaManager;
+import com.rkouchoo.mm.management.MediaManager;
 
 public class ImageLoader {
 

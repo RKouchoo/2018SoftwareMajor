@@ -1,4 +1,4 @@
-package com.rkouchoo.mm;
+package com.rkouchoo.mm.management;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -34,6 +34,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.rkouchoo.mm.Constants;
 import com.rkouchoo.mm.actions.ActionManager;
 import com.rkouchoo.mm.file.FileTableModel;
 import com.rkouchoo.mm.util.ImageLoader;
@@ -43,6 +44,8 @@ public class ManagerBackend extends MediaManager {
 	
 	public ManagerBackend() {
 		super();
+		messenger = new MessageUtil(uiPanel);
+		actionManager = new ActionManager(this, messenger);		
 	}
 	
 	/**
@@ -252,6 +255,26 @@ public class ManagerBackend extends MediaManager {
 			System.err.println("Failed to load ICON images for the application");
 		}
 
+	}
+	
+	/**
+	 * Shows the roots of the file system to allow
+	 * @param view
+	 * @param root
+	 */
+	public void showFileSystemRoots(FileSystemView view, DefaultMutableTreeNode root) {
+		// show the file system roots.
+		File[] roots = view.getRoots();
+		for (File fileSystemRoot : roots) {
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
+			root.add(node);
+			File[] files = view.getFiles(fileSystemRoot, true);
+			for (File file : files) {
+				if (file.isDirectory()) {
+					node.add(new DefaultMutableTreeNode(file));
+				}
+			}
+		}
 	}
 
 	/**

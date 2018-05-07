@@ -1,4 +1,4 @@
-package com.rkouchoo.mm;
+package com.rkouchoo.mm.management;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -25,7 +25,7 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import com.rkouchoo.mm.file.FileSystemRoot;
+import com.rkouchoo.mm.Constants;
 import com.rkouchoo.mm.file.FileTreeCellRenderer;
 
 public class ManagerRunner extends ManagerBackend {
@@ -69,7 +69,7 @@ public class ManagerRunner extends ManagerBackend {
 			rootTreeModel = new DefaultMutableTreeNode();
 			treeModel = new DefaultTreeModel(rootTreeModel);
 
-			FileSystemRoot.showFileSystemRoots(fileSystemView, rootTreeModel);
+			showFileSystemRoots(fileSystemView, rootTreeModel);
 
 			tree = new JTree(treeModel);
 			tree.setRootVisible(false);
@@ -122,8 +122,7 @@ public class ManagerRunner extends ManagerBackend {
 			isFile.setEnabled(false);
 			flags.add(isFile);
 			fileDetailsValues.add(flags);
-
-
+			
 			windowToolbar = new JToolBar();
 			windowToolbar.setFloatable(false);
 
@@ -175,8 +174,6 @@ public class ManagerRunner extends ManagerBackend {
 			progressBar.setVisible(false);
 
 			uiPanel.add(simpleOutput, BorderLayout.SOUTH);	
-			
-			//createBackEndWhenReady();
 			
 			super.setLablesDisabled(fileDetailsLabels);
 			super.doButtonHandling(); // make sure all the ui buttons are initialised and working.

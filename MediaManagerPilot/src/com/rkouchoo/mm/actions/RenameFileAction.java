@@ -18,41 +18,41 @@ public class RenameFileAction implements ActionInterface {
 	
 	@Override
 	public void run() {
-		if (master.getManager().currentFile == null) {
+		if (master.getMediaManager().currentFile == null) {
 			master.getMessenger().showErrorMessage("No file selected to rename.", "Select File");
 			return;
 		}
 
-		String renameTo = JOptionPane.showInputDialog(master.getManager().uiPanel, "New Name");
+		String renameTo = JOptionPane.showInputDialog(master.getMediaManager().uiPanel, "New Name");
 		if (renameTo != null) {
 			try {
-				boolean directory = master.getManager().currentFile.isDirectory();
-				TreePath parentPath = master.getBackend().findTreePath(master.getManager().currentFile.getParentFile());
+				boolean directory = master.getMediaManager().currentFile.isDirectory();
+				TreePath parentPath = master.getMediaManager().findTreePath(master.getMediaManager().currentFile.getParentFile());
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 
-				boolean renamed = master.getManager().currentFile.renameTo(new File(master.getManager().currentFile.getParentFile(), renameTo));
+				boolean renamed = master.getMediaManager().currentFile.renameTo(new File(master.getMediaManager().currentFile.getParentFile(), renameTo));
 				
 				if (renamed) {
 					if (directory) {
-						TreePath currentPath = master.getBackend().findTreePath(master.getManager().currentFile);
+						TreePath currentPath = master.getMediaManager().findTreePath(master.getMediaManager().currentFile);
 						System.out.println(currentPath);
 						DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
-						master.getManager().treeModel.removeNodeFromParent(currentNode);
+						master.getMediaManager().treeModel.removeNodeFromParent(currentNode);
 					}
 
-					master.getBackend().showChildren(parentNode);
+					master.getMediaManager().showChildren(parentNode);
 				} else {
-					String msg = "The file '" + master.getManager().currentFile + "' could not be renamed.";
+					String msg = "The file '" + master.getMediaManager().currentFile + "' could not be renamed.";
 					master.getMessenger().showErrorMessage(msg, "Rename Failed");
 				}
 				
 				
 			} catch (Throwable t) {
 				// For some reason when a folder is renamed it throws an exception but works anyway? I am not sure why this happens. please send help
-				master.getManager().uiPanel.repaint();
+				master.getMediaManager().uiPanel.repaint();
 			}
 		}
-		master.getManager().uiPanel.repaint();
+		master.getMediaManager().uiPanel.repaint();
 	}
 
 }
