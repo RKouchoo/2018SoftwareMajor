@@ -1,5 +1,6 @@
 package com.rkouchoo.mm;
 
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,9 +9,18 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -21,12 +31,174 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.rkouchoo.mm.actions.ActionManager;
 import com.rkouchoo.mm.file.FileTableModel;
 import com.rkouchoo.mm.util.ImageLoader;
+import com.rkouchoo.mm.util.MessageUtil;
 
-public class ManagerBackend extends MediaManager {
+public class ManagerBackend {
+	
+	protected Desktop desktop;
+	protected FileSystemView fileSystemView;
+	protected JTree tree;
+	protected JTable table;
+	protected JProgressBar progressBar;
+	protected FileTableModel fileTableModel;
+	protected ListSelectionListener listSelectionListener;
+	protected boolean cellSizesSet = false;
+	protected JButton openFile;
+	protected JButton printFile;
+	protected JButton editFile;
+	protected JButton deleteFile;
+	protected JButton newFile;
+	protected JButton renameFile;
+
+	protected JLabel fileName;
+	protected JTextField path;
+	protected JLabel date;
+	protected JLabel size;
+	protected JCheckBox readable;
+	protected JCheckBox writable;
+	protected JCheckBox executable;
+	protected JRadioButton isDirectory;
+	protected JRadioButton isFile;
+	protected JPanel detailView;
+	protected JScrollPane tableScroll;
+	protected Dimension windowDimension;
+	protected DefaultMutableTreeNode rootTreeModel;
+	protected JToolBar windowToolbar;
+	
+	public JPanel newFilePanel;
+	public JRadioButton newTypeFile;
+	public JTextField name;
+	public File currentFile;
+	public JPanel uiPanel;
+	public DefaultTreeModel treeModel;
+	
+	public ActionManager actionManager;
+	public ManagerBackend backend;
+
+	public MessageUtil messenger;
+	
+	/**
+	 * 
+	 * @param desktop
+	 * @param fileSystemView
+	 * @param tree
+	 * @param table
+	 * @param progressBar
+	 * @param fileTableModel
+	 * @param listSelectionListener
+	 * @param cellSizesSet
+	 * @param openFile
+	 * @param printFile
+	 * @param editFile
+	 * @param deleteFile
+	 * @param newFile
+	 * @param renameFile
+	 * @param fileName
+	 * @param path
+	 * @param date
+	 * @param size
+	 * @param readable
+	 * @param writable
+	 * @param executable
+	 * @param isDirectory
+	 * @param isFile
+	 * @param detailView
+	 * @param tableScroll
+	 * @param windowDimension
+	 * @param rootTreeModel
+	 * @param windowToolbar
+	 * @param newFilePanel
+	 * @param newTypeFile
+	 * @param name
+	 * @param currentFile
+	 * @param uiPanel
+	 * @param treeModel
+	 * @param actionManager
+	 * @param backend
+	 * @param messenger
+	 */
+	public ManagerBackend(Desktop desktop, 
+			FileSystemView fileSystemView, 
+			JTree tree, 
+			JTable table,
+			JProgressBar progressBar,
+			FileTableModel fileTableModel, 
+			ListSelectionListener listSelectionListener,
+			boolean cellSizesSet, 
+			JButton openFile, 
+			JButton printFile, 
+			JButton editFile, 
+			JButton deleteFile,
+			JButton newFile, 
+			JButton renameFile, 
+			JLabel fileName, 
+			JTextField path, 
+			JLabel date, 
+			JLabel size,
+			JCheckBox readable, 
+			JCheckBox writable,
+			JCheckBox executable, 
+			JRadioButton isDirectory, 
+			JRadioButton isFile,
+			JPanel detailView, 
+			JScrollPane tableScroll, 
+			Dimension windowDimension, 
+			DefaultMutableTreeNode rootTreeModel,
+			JToolBar windowToolbar, 
+			JPanel newFilePanel, 
+			JRadioButton newTypeFile, 
+			JTextField name, File currentFile,
+			JPanel uiPanel, 
+			DefaultTreeModel treeModel, 
+			ActionManager actionManager, 
+			ManagerBackend backend,
+			MessageUtil messenger) {
+		
+		super();
+		this.desktop = desktop;
+		this.fileSystemView = fileSystemView;
+		this.tree = tree;
+		this.table = table;
+		this.progressBar = progressBar;
+		this.fileTableModel = fileTableModel;
+		this.listSelectionListener = listSelectionListener;
+		this.cellSizesSet = cellSizesSet;
+		this.openFile = openFile;
+		this.printFile = printFile;
+		this.editFile = editFile;
+		this.deleteFile = deleteFile;
+		this.newFile = newFile;
+		this.renameFile = renameFile;
+		this.fileName = fileName;
+		this.path = path;
+		this.date = date;
+		this.size = size;
+		this.readable = readable;
+		this.writable = writable;
+		this.executable = executable;
+		this.isDirectory = isDirectory;
+		this.isFile = isFile;
+		this.detailView = detailView;
+		this.tableScroll = tableScroll;
+		this.windowDimension = windowDimension;
+		this.rootTreeModel = rootTreeModel;
+		this.windowToolbar = windowToolbar;
+		this.newFilePanel = newFilePanel;
+		this.newTypeFile = newTypeFile;
+		this.name = name;
+		this.currentFile = currentFile;
+		this.uiPanel = uiPanel;
+		this.treeModel = treeModel;
+		this.actionManager = actionManager;
+		this.backend = backend;
+		this.messenger = messenger;
+	}
 		
 	/**
 	 * Make sure the files are displayed from the root node
@@ -207,26 +379,7 @@ public class ManagerBackend extends MediaManager {
 			fileDetailsLabels.getComponent(i).setEnabled(false);
 		}
 	}
-	
-	/**
-	 * Shows the roots of the file system to allow
-	 * @param view
-	 * @param root
-	 */
-	public void showFileSystemRoots(FileSystemView view, DefaultMutableTreeNode root) {
-		// show the file system roots.
-		File[] roots = view.getRoots();
-		for (File fileSystemRoot : roots) {
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
-			root.add(node);
-			File[] files = view.getFiles(fileSystemRoot, true);
-			for (File file : files) {
-				if (file.isDirectory()) {
-					node.add(new DefaultMutableTreeNode(file));
-				}
-			}
-		}
-	}
+
 	
 	/**
 	 * Sets the look and feel based on the operating system. 

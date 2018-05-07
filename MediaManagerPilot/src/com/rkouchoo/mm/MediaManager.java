@@ -15,6 +15,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 
 import com.rkouchoo.mm.actions.ActionManager;
+import com.rkouchoo.mm.file.FileSystemRoot;
 import com.rkouchoo.mm.file.FileTableModel;
 import com.rkouchoo.mm.file.FileTreeCellRenderer;
 import com.rkouchoo.mm.util.MessageUtil;
@@ -35,6 +36,7 @@ public class MediaManager {
 	protected JButton deleteFile;
 	protected JButton newFile;
 	protected JButton renameFile;
+
 	protected JLabel fileName;
 	protected JTextField path;
 	protected JLabel date;
@@ -64,11 +66,14 @@ public class MediaManager {
 	
 	public MediaManager() {
 		messenger = new MessageUtil(uiPanel);
-		actionManager = new ActionManager(this, messenger);
-	
-		backend = new ManagerBackend();
+		actionManager = new ActionManager(this, messenger);		
 	}
 
+	
+	/**
+	 * TODO, most of this should be done in the backend anyway....
+	 * @return
+	 */
 	public Container getUIPanel() {
 		
 		if (uiPanel == null) {
@@ -81,7 +86,7 @@ public class MediaManager {
 			EmptyBorder uiEmptyBorder = new EmptyBorder(5, 5, 5, 5);
 			
 			/**
-			 * Initialse and create all of the elements from the manager.
+			 * Initialize and create all of the elements from the manager.
 			 */
 			uiPanel = new JPanel(panelBorderLayout);
 			uiPanel.setBorder(uiEmptyBorder);
@@ -101,7 +106,7 @@ public class MediaManager {
 			rootTreeModel = new DefaultMutableTreeNode();
 			treeModel = new DefaultTreeModel(rootTreeModel);
 
-			backend.showFileSystemRoots(fileSystemView, rootTreeModel);
+			FileSystemRoot.showFileSystemRoots(fileSystemView, rootTreeModel);
 
 			tree = new JTree(treeModel);
 			tree.setRootVisible(false);
@@ -155,7 +160,6 @@ public class MediaManager {
 			flags.add(isFile);
 			fileDetailsValues.add(flags);
 
-			backend.setLablesDisabled(fileDetailsLabels);
 
 			windowToolbar = new JToolBar();
 			windowToolbar.setFloatable(false);
@@ -173,8 +177,6 @@ public class MediaManager {
 			newFile = new JButton("New");
 			renameFile = new JButton("Rename");
 			deleteFile = new JButton("Delete");
-			
-			backend.doButtonHandling(); // make sure all the ui buttons are initialised and working.
 			
 			/**
 			 * Add all the items to the panel and then return it.
@@ -210,10 +212,58 @@ public class MediaManager {
 			progressBar.setVisible(false);
 
 			uiPanel.add(simpleOutput, BorderLayout.SOUTH);	
+			
+			createBackEndWhenReady();
+			
+			backend.setLablesDisabled(fileDetailsLabels);
+			backend.doButtonHandling(); // make sure all the ui buttons are initialised and working.
 		}
 		
 		return uiPanel;
 	}
+	
+	private void createBackEndWhenReady() {
+		backend = new ManagerBackend(
+				desktop, 
+				fileSystemView, 
+				tree, 
+				table, 
+				progressBar, 
+				fileTableModel, 
+				listSelectionListener, 
+				cellSizesSet, 
+				openFile, 
+				printFile,
+				editFile, 
+				deleteFile, 
+				newFile, 
+				renameFile, 
+				fileName, 
+				path, 
+				date,
+				size, 
+				readable,
+				writable,
+				executable,
+				isDirectory,
+				isFile, 
+				detailView,
+				tableScroll, 
+				windowDimension,
+				rootTreeModel, 
+				windowToolbar, 
+				newFilePanel, 
+				newTypeFile,
+				name, 
+				currentFile,
+				uiPanel, 
+				treeModel,
+				actionManager, 
+				backend,
+				messenger
+				);
+	}
+	
 	
 	/**
 	 * A getter that allows you to get the manager.
@@ -229,34 +279,5 @@ public class MediaManager {
 	
 	public ActionManager getActionManager() {
 		return actionManager;
-	}
-	
-	/**
-	 * Main method that runs mediaManager.getUIPanel() which kickstarts everything.
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {			
-				MediaManager mediaManager = new MediaManager();
-				mediaManager.backend.setSystemLookAndFeel();
-				
-				JFrame frame = new JFrame(Constants.WINDOW_TITLE);
-				
-				JPanel panel = (JPanel) mediaManager.getUIPanel();
-				
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
-				frame.setContentPane(mediaManager.getUIPanel());
-				
-				mediaManager.backend.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PROJECT_PATH);
-		
-				frame.pack();
-				frame.setLocationByPlatform(Constants.WINDOW_NATIVE_LOCATION);
-				frame.setMinimumSize(frame.getSize());
-				frame.setVisible(true);
-				
-				mediaManager.backend.showRootFile();
-			}
-		});
 	}
 }

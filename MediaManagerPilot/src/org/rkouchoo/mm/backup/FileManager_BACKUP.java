@@ -648,7 +648,7 @@ public class FileManager_BACKUP {
 		return created;
 	}
 
-	public static void main(String[] args) {
+	public static void main() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
