@@ -66,7 +66,7 @@ public class NewFileAction implements ActionInterface {
 				}
 				if (created) {
 
-					TreePath parentPath = manager.getManager().findTreePath(parentFile);
+					TreePath parentPath = manager.getBackend().findTreePath(parentFile);
 					DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 
 					if (file.isDirectory()) {
@@ -75,7 +75,7 @@ public class NewFileAction implements ActionInterface {
 						manager.getManager().treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
 					}
 
-					manager.getManager().showChildren(parentNode);
+					manager.getBackend().showChildren(parentNode);
 				} else {
 					String msg = "The file '" + file + "' could not be created.";
 					manager.getMessenger().showErrorMessage(msg, "Create Failed");

@@ -1,5 +1,6 @@
 package com.rkocuhoo.mm.interfaces;
 
+import com.rkouchoo.mm.ManagerBackend;
 import com.rkouchoo.mm.MediaManager;
 import com.rkouchoo.mm.util.MessageUtil;
 
@@ -12,6 +13,8 @@ public interface ActionManagerInterface {
 	public MediaManager getManager();
 	
 	public MessageUtil getMessenger();
+	
+	public ManagerBackend getBackend();
 	
 	public void renameFile();
 	

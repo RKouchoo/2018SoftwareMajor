@@ -24,6 +24,7 @@ public class CopyFileAction implements ActionInterface {
 		this.manager = man;
 	}
 
+	@SuppressWarnings("resource")
 	@Override @Deprecated
 	public void run() {
 		boolean created = false;

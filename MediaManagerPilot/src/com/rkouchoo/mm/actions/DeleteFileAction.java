@@ -26,7 +26,7 @@ public class DeleteFileAction implements ActionInterface{
 		if (result == JOptionPane.OK_OPTION) {
 			try {
 				System.out.println("currentFile: " + manager.getManager().currentFile);
-				TreePath parentPath = manager.getManager().findTreePath(manager.getManager().currentFile.getParentFile());
+				TreePath parentPath = manager.getManager().backend.findTreePath(manager.getManager().currentFile.getParentFile());
 				System.out.println("parentPath: " + parentPath);
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 				System.out.println("parentNode: " + parentNode);
@@ -35,15 +35,15 @@ public class DeleteFileAction implements ActionInterface{
 				boolean deleted = manager.getManager().currentFile.delete();
 				if (deleted) {
 					if (directory) {
-						// delete the node..
-						TreePath currentPath = manager.getManager().findTreePath(manager.getManager().currentFile);
+						// delete the node.
+						TreePath currentPath = manager.getBackend().findTreePath(manager.getManager().currentFile);
 						System.out.println(currentPath);
 						DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
 
 						manager.getManager().treeModel.removeNodeFromParent(currentNode);
 					}
 
-					manager.getManager().showChildren(parentNode);
+					manager.getBackend().showChildren(parentNode);
 				} else {
 					String msg = "The file '" + manager.getManager().currentFile + "' could not be deleted.";
 					manager.getMessenger().showErrorMessage(msg, "Delete Failed");

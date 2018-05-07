@@ -1,6 +1,7 @@
 package com.rkouchoo.mm.actions;
 
 import com.rkocuhoo.mm.interfaces.ActionManagerInterface;
+import com.rkouchoo.mm.ManagerBackend;
 import com.rkouchoo.mm.MediaManager;
 import com.rkouchoo.mm.util.MessageUtil;
 
@@ -54,6 +55,11 @@ public class ActionManager implements ActionManagerInterface {
 	@Override
 	public MessageUtil getMessenger() {
 		return messenger;
+	}
+
+	@Override
+	public ManagerBackend getBackend() {
+		return getManager().backend;
 	}
 
 }
