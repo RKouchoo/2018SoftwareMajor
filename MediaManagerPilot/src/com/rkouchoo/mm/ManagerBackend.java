@@ -39,167 +39,12 @@ import com.rkouchoo.mm.file.FileTableModel;
 import com.rkouchoo.mm.util.ImageLoader;
 import com.rkouchoo.mm.util.MessageUtil;
 
-public class ManagerBackend {
+public class ManagerBackend extends MediaManager {
 	
-	protected Desktop desktop;
-	protected FileSystemView fileSystemView;
-	protected JTree tree;
-	protected JTable table;
-	protected JProgressBar progressBar;
-	protected FileTableModel fileTableModel;
-	protected ListSelectionListener listSelectionListener;
-	protected boolean cellSizesSet = false;
-	protected JButton openFile;
-	protected JButton printFile;
-	protected JButton editFile;
-	protected JButton deleteFile;
-	protected JButton newFile;
-	protected JButton renameFile;
-
-	protected JLabel fileName;
-	protected JTextField path;
-	protected JLabel date;
-	protected JLabel size;
-	protected JCheckBox readable;
-	protected JCheckBox writable;
-	protected JCheckBox executable;
-	protected JRadioButton isDirectory;
-	protected JRadioButton isFile;
-	protected JPanel detailView;
-	protected JScrollPane tableScroll;
-	protected Dimension windowDimension;
-	protected DefaultMutableTreeNode rootTreeModel;
-	protected JToolBar windowToolbar;
-	
-	public JPanel newFilePanel;
-	public JRadioButton newTypeFile;
-	public JTextField name;
-	public File currentFile;
-	public JPanel uiPanel;
-	public DefaultTreeModel treeModel;
-	
-	public ActionManager actionManager;
-	public ManagerBackend backend;
-
-	public MessageUtil messenger;
-	
-	/**
-	 * 
-	 * @param desktop
-	 * @param fileSystemView
-	 * @param tree
-	 * @param table
-	 * @param progressBar
-	 * @param fileTableModel
-	 * @param listSelectionListener
-	 * @param cellSizesSet
-	 * @param openFile
-	 * @param printFile
-	 * @param editFile
-	 * @param deleteFile
-	 * @param newFile
-	 * @param renameFile
-	 * @param fileName
-	 * @param path
-	 * @param date
-	 * @param size
-	 * @param readable
-	 * @param writable
-	 * @param executable
-	 * @param isDirectory
-	 * @param isFile
-	 * @param detailView
-	 * @param tableScroll
-	 * @param windowDimension
-	 * @param rootTreeModel
-	 * @param windowToolbar
-	 * @param newFilePanel
-	 * @param newTypeFile
-	 * @param name
-	 * @param currentFile
-	 * @param uiPanel
-	 * @param treeModel
-	 * @param actionManager
-	 * @param backend
-	 * @param messenger
-	 */
-	public ManagerBackend(Desktop desktop, 
-			FileSystemView fileSystemView, 
-			JTree tree, 
-			JTable table,
-			JProgressBar progressBar,
-			FileTableModel fileTableModel, 
-			ListSelectionListener listSelectionListener,
-			boolean cellSizesSet, 
-			JButton openFile, 
-			JButton printFile, 
-			JButton editFile, 
-			JButton deleteFile,
-			JButton newFile, 
-			JButton renameFile, 
-			JLabel fileName, 
-			JTextField path, 
-			JLabel date, 
-			JLabel size,
-			JCheckBox readable, 
-			JCheckBox writable,
-			JCheckBox executable, 
-			JRadioButton isDirectory, 
-			JRadioButton isFile,
-			JPanel detailView, 
-			JScrollPane tableScroll, 
-			Dimension windowDimension, 
-			DefaultMutableTreeNode rootTreeModel,
-			JToolBar windowToolbar, 
-			JPanel newFilePanel, 
-			JRadioButton newTypeFile, 
-			JTextField name, File currentFile,
-			JPanel uiPanel, 
-			DefaultTreeModel treeModel, 
-			ActionManager actionManager, 
-			ManagerBackend backend,
-			MessageUtil messenger) {
-		
+	public ManagerBackend() {
 		super();
-		this.desktop = desktop;
-		this.fileSystemView = fileSystemView;
-		this.tree = tree;
-		this.table = table;
-		this.progressBar = progressBar;
-		this.fileTableModel = fileTableModel;
-		this.listSelectionListener = listSelectionListener;
-		this.cellSizesSet = cellSizesSet;
-		this.openFile = openFile;
-		this.printFile = printFile;
-		this.editFile = editFile;
-		this.deleteFile = deleteFile;
-		this.newFile = newFile;
-		this.renameFile = renameFile;
-		this.fileName = fileName;
-		this.path = path;
-		this.date = date;
-		this.size = size;
-		this.readable = readable;
-		this.writable = writable;
-		this.executable = executable;
-		this.isDirectory = isDirectory;
-		this.isFile = isFile;
-		this.detailView = detailView;
-		this.tableScroll = tableScroll;
-		this.windowDimension = windowDimension;
-		this.rootTreeModel = rootTreeModel;
-		this.windowToolbar = windowToolbar;
-		this.newFilePanel = newFilePanel;
-		this.newTypeFile = newTypeFile;
-		this.name = name;
-		this.currentFile = currentFile;
-		this.uiPanel = uiPanel;
-		this.treeModel = treeModel;
-		this.actionManager = actionManager;
-		this.backend = backend;
-		this.messenger = messenger;
 	}
-		
+	
 	/**
 	 * Make sure the files are displayed from the root node
 	 */
@@ -390,7 +235,7 @@ public class ManagerBackend {
 			// Significantly improves the look of the output in terms of the file names returned by FileSystemView!
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {
-			// erm.. couldn't find your operating system?! kk will just use the default java theme.
+			System.out.println("visual class error!");
 		}
 	}
 	

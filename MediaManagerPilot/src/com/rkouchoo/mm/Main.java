@@ -12,21 +12,22 @@ public class Main {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {			
-				MediaManager mediaManager = new MediaManager();
+				
+				ManagerBackend mediaManager = new ManagerRunner();
 				
 				JFrame frame = new JFrame(Constants.WINDOW_TITLE);
 							
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
-				frame.setContentPane(mediaManager.getUIPanel());
-				mediaManager.backend.setSystemLookAndFeel();
-				mediaManager.backend.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PROJECT_PATH);
-		
+				frame.setContentPane(((ManagerRunner) mediaManager).getUIPanel());
+				mediaManager.setSystemLookAndFeel();
+				mediaManager.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PROJECT_PATH);
+				mediaManager.showRootFile();
+
 				frame.pack();
 				frame.setLocationByPlatform(Constants.WINDOW_NATIVE_LOCATION);
 				frame.setMinimumSize(frame.getSize());
 				frame.setVisible(true);
 				
-				mediaManager.backend.showRootFile();
 			}
 		});
 	}
