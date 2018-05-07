@@ -27,20 +27,20 @@ public class RenameFileAction implements ActionInterface {
 		if (renameTo != null) {
 			try {
 				boolean directory = master.getManager().currentFile.isDirectory();
-				TreePath parentPath = master.getManager().findTreePath(master.getManager().currentFile.getParentFile());
+				TreePath parentPath = master.getBackend().findTreePath(master.getManager().currentFile.getParentFile());
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) parentPath.getLastPathComponent();
 
 				boolean renamed = master.getManager().currentFile.renameTo(new File(master.getManager().currentFile.getParentFile(), renameTo));
 				
 				if (renamed) {
 					if (directory) {
-						TreePath currentPath = master.getManager().findTreePath(master.getManager().currentFile);
+						TreePath currentPath = master.getBackend().findTreePath(master.getManager().currentFile);
 						System.out.println(currentPath);
 						DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
 						master.getManager().treeModel.removeNodeFromParent(currentNode);
 					}
 
-					master.getManager().showChildren(parentNode);
+					master.getBackend().showChildren(parentNode);
 				} else {
 					String msg = "The file '" + master.getManager().currentFile + "' could not be renamed.";
 					master.getMessenger().showErrorMessage(msg, "Rename Failed");

@@ -56,4 +56,9 @@ public class ActionManager implements ActionManagerInterface {
 		return messenger;
 	}
 
+	@Override
+	public ManagerBackend getBackend() {
+		return getManager().backend;
+	}
+
 }
