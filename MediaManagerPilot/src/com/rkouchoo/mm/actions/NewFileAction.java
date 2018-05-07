@@ -25,13 +25,13 @@ public class NewFileAction implements ActionInterface {
 	
 	@Override
 	public void run() {
+		
 		if (manager.getManager().currentFile == null) {
 			manager.getMessenger().showErrorMessage("No location selected for new file.", "Select Location");
 			return;
 		}
 
 		if (manager.getManager().newFilePanel == null) {
-			
 			manager.getManager().newFilePanel = new JPanel(new BorderLayout(3, 3));
 			JPanel southRadio = new JPanel(new GridLayout(1, 0, 2, 2));
 			manager.getManager().newTypeFile = new JRadioButton("File", true);

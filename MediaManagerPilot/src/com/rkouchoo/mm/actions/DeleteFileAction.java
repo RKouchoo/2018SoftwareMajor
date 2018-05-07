@@ -16,6 +16,7 @@ public class DeleteFileAction implements ActionInterface{
 
 	@Override
 	public void run() {
+		System.out.println("hi");
 		if (manager.getManager().currentFile == null) {
 			manager.getMessenger().showErrorMessage("No file selected for deletion.", "Select File");
 			return;

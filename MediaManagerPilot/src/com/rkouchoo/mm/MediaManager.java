@@ -72,6 +72,7 @@ public class MediaManager {
 	
 	/**
 	 * TODO, most of this should be done in the backend anyway....
+	 * every object needs to be created first before it is played with so backend can be created so file handling will work.!!!!!!
 	 * @return
 	 */
 	public Container getUIPanel() {
@@ -89,11 +90,40 @@ public class MediaManager {
 			 * Initialize and create all of the elements from the manager.
 			 */
 			uiPanel = new JPanel(panelBorderLayout);
-			uiPanel.setBorder(uiEmptyBorder);
 			fileSystemView = FileSystemView.getFileSystemView();
 			desktop = Desktop.getDesktop();
-			detailView = new JPanel(detailBorderLayout);
 			table = new JTable();
+			rootTreeModel = new DefaultMutableTreeNode();
+			treeModel = new DefaultTreeModel(rootTreeModel);
+			tree = new JTree(treeModel);
+			JScrollPane treeScroll = new JScrollPane(tree);
+			fileName = new JLabel();
+			path = new JTextField(5);
+			path.setEditable(false);
+			date = new JLabel();
+			size = new JLabel();
+			JPanel flags = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 0));
+			isDirectory = new JRadioButton("Directory");
+			isFile = new JRadioButton("File");
+			windowToolbar = new JToolBar();
+			openFile = new JButton("Open");
+			editFile = new JButton("Edit");
+			printFile = new JButton("Print");
+			newFile = new JButton("New");
+			renameFile = new JButton("Rename");
+			deleteFile = new JButton("Delete");
+			readable = new JCheckBox("Read  ");
+			writable = new JCheckBox("Write  ");
+			executable = new JCheckBox("Execute");
+			uiPanel.setBorder(uiEmptyBorder);
+			JPanel fileView = new JPanel(new BorderLayout(3, 3));
+			detailView = new JPanel(detailBorderLayout);
+			FileSystemRoot.showFileSystemRoots(fileSystemView, rootTreeModel);
+
+			createBackEndWhenReady();
+			
+			backend.doButtonHandling(); // make sure all the ui buttons are initialised and working.
+
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setAutoCreateRowSorter(true);
 			table.setShowVerticalLines(false);
@@ -101,20 +131,18 @@ public class MediaManager {
 		    windowDimension = new Dimension(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
 			tableScroll.setPreferredSize(windowDimension);
 			detailView.add(tableScroll, BorderLayout.CENTER);
+			JPanel fileMainDetails = new JPanel(new BorderLayout(4, 2));
+			JPanel fileDetailsLabels = new JPanel(new GridLayout(0, 1, 2, 2));
+			JPanel fileDetailsValues = new JPanel(new GridLayout(0, 1, 2, 2));
 
 			// the File tree
-			rootTreeModel = new DefaultMutableTreeNode();
-			treeModel = new DefaultTreeModel(rootTreeModel);
 
-			FileSystemRoot.showFileSystemRoots(fileSystemView, rootTreeModel);
 
-			tree = new JTree(treeModel);
 			tree.setRootVisible(false);
 			tree.setCellRenderer(new FileTreeCellRenderer());
 			tree.expandRow(0);
 			tree.setVisibleRowCount(Constants.VISIBLE_ROW_COUNT);
 
-			JScrollPane treeScroll = new JScrollPane(tree);
 
 			Dimension preferredSize = treeScroll.getPreferredSize();
 			Dimension widePreferred = new Dimension(200, (int) preferredSize.getHeight());
@@ -122,51 +150,33 @@ public class MediaManager {
 			treeScroll.setPreferredSize(widePreferred);
 
 			// details for a File
-			JPanel fileMainDetails = new JPanel(new BorderLayout(4, 2));
 			fileMainDetails.setBorder(new EmptyBorder(0, 6, 0, 6));
-
-			JPanel fileDetailsLabels = new JPanel(new GridLayout(0, 1, 2, 2));
 			fileMainDetails.add(fileDetailsLabels, BorderLayout.WEST);
-
-			JPanel fileDetailsValues = new JPanel(new GridLayout(0, 1, 2, 2));
 			fileMainDetails.add(fileDetailsValues, BorderLayout.CENTER);
-
 			fileDetailsLabels.add(new JLabel("File", JLabel.TRAILING));
 
-			fileName = new JLabel();
 			fileDetailsValues.add(fileName);
 			fileDetailsLabels.add(new JLabel("Path/name", JLabel.TRAILING));
 
-			path = new JTextField(5);
-			path.setEditable(false);
 			fileDetailsValues.add(path);
 			fileDetailsLabels.add(new JLabel("Last Modified", JLabel.TRAILING));
 
-			date = new JLabel();
 			fileDetailsValues.add(date);
 			fileDetailsLabels.add(new JLabel("File size", JLabel.TRAILING));
 
-			size = new JLabel();
 			fileDetailsValues.add(size);
 			fileDetailsLabels.add(new JLabel("Type", JLabel.TRAILING));
 
-			JPanel flags = new JPanel(new FlowLayout(FlowLayout.LEADING, 4, 0));
-			isDirectory = new JRadioButton("Directory");
 			isDirectory.setEnabled(false);
 			flags.add(isDirectory);
 
-			isFile = new JRadioButton("File");
 			isFile.setEnabled(false);
 			flags.add(isFile);
 			fileDetailsValues.add(flags);
 
-
-			windowToolbar = new JToolBar();
 			windowToolbar.setFloatable(false);
 
-			openFile = new JButton("Open");
-			editFile = new JButton("Edit");
-			printFile = new JButton("Print");
+
 
 			// Check the actions are supported on the current platform. Should be as it is
 			// run in windows for testing.
@@ -174,16 +184,10 @@ public class MediaManager {
 			editFile.setEnabled(desktop.isSupported(Desktop.Action.EDIT));
 			printFile.setEnabled(desktop.isSupported(Desktop.Action.PRINT));
 
-			newFile = new JButton("New");
-			renameFile = new JButton("Rename");
-			deleteFile = new JButton("Delete");
-			
+		
 			/**
 			 * Add all the items to the panel and then return it.
 			 */		
-			readable = new JCheckBox("Read  ");
-			writable = new JCheckBox("Write  ");
-			executable = new JCheckBox("Execute");
 			
 			// add the elements to the toolbar
 			windowToolbar.add(openFile);
@@ -198,7 +202,6 @@ public class MediaManager {
 			windowToolbar.add(writable);
 			windowToolbar.add(executable);
 
-			JPanel fileView = new JPanel(new BorderLayout(3, 3));
 
 			fileView.add(windowToolbar, BorderLayout.NORTH);
 			fileView.add(fileMainDetails, BorderLayout.CENTER);
@@ -212,11 +215,7 @@ public class MediaManager {
 			progressBar.setVisible(false);
 
 			uiPanel.add(simpleOutput, BorderLayout.SOUTH);	
-			
-			createBackEndWhenReady();
-			
 			backend.setLablesDisabled(fileDetailsLabels);
-			backend.doButtonHandling(); // make sure all the ui buttons are initialised and working.
 		}
 		
 		return uiPanel;

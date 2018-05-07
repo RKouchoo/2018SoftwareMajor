@@ -84,44 +84,7 @@ public class ManagerBackend {
 	public MessageUtil messenger;
 	
 	/**
-	 * 
-	 * @param desktop
-	 * @param fileSystemView
-	 * @param tree
-	 * @param table
-	 * @param progressBar
-	 * @param fileTableModel
-	 * @param listSelectionListener
-	 * @param cellSizesSet
-	 * @param openFile
-	 * @param printFile
-	 * @param editFile
-	 * @param deleteFile
-	 * @param newFile
-	 * @param renameFile
-	 * @param fileName
-	 * @param path
-	 * @param date
-	 * @param size
-	 * @param readable
-	 * @param writable
-	 * @param executable
-	 * @param isDirectory
-	 * @param isFile
-	 * @param detailView
-	 * @param tableScroll
-	 * @param windowDimension
-	 * @param rootTreeModel
-	 * @param windowToolbar
-	 * @param newFilePanel
-	 * @param newTypeFile
-	 * @param name
-	 * @param currentFile
-	 * @param uiPanel
-	 * @param treeModel
-	 * @param actionManager
-	 * @param backend
-	 * @param messenger
+	 * The 'backend' class which contains most of the logic that is needed to run the application.
 	 */
 	public ManagerBackend(Desktop desktop, 
 			FileSystemView fileSystemView, 
@@ -279,7 +242,7 @@ public class ManagerBackend {
 			// use the preferred width of the header.
 			JLabel label = new JLabel((String) tableColumn.getHeaderValue());
 			Dimension preferred = label.getPreferredSize();
-			width = (int) preferred.getWidth() + 14;
+			width = (int) preferred.getWidth() + Constants.COLUMN_PADDING_WITDH;
 		}
 		
 		tableColumn.setPreferredWidth(width);
@@ -343,7 +306,7 @@ public class ManagerBackend {
 	 * @param file
 	 */
 	private void setFileDetails(File file) {
-		this.currentFile = file;
+		currentFile = file;
 		fileName.setText(fileSystemView.getSystemDisplayName(file));
 		path.setText(file.getPath());
 		date.setText(new Date(file.lastModified()).toString());
@@ -370,7 +333,7 @@ public class ManagerBackend {
 	
 	/**
 	 * TODO: be moved to a utils class!
-	 * Sets all of the labes in a panel to disbaled.
+	 * Sets all of the lables in a panel to disbaled.
 	 * @param fileDetailsLabels
 	 */
 	public void setLablesDisabled(JPanel fileDetailsLabels) {
