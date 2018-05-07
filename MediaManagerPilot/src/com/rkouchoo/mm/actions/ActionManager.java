@@ -1,7 +1,8 @@
-package com.rkouchoo.fm.actions;
+package com.rkouchoo.mm.actions;
 
-import com.rkocuhoo.fm.interfaces.ActionManagerInterface;
-import com.rkouchoo.fm.MediaManager;
+import com.rkocuhoo.mm.interfaces.ActionManagerInterface;
+import com.rkouchoo.mm.MediaManager;
+import com.rkouchoo.mm.util.MessageUtil;
 
 public class ActionManager implements ActionManagerInterface {
 
@@ -12,9 +13,12 @@ public class ActionManager implements ActionManagerInterface {
 	private DeleteFileAction delete;
 	private NewFileAction newFile;
 	
-	public ActionManager(MediaManager man) {
+	private MessageUtil messenger;
+	
+	public ActionManager(MediaManager man, MessageUtil messenger) {
 		this.manager = man;
-
+		this.messenger = messenger;
+		
 		rename = new RenameFileAction(this);
 		delete = new DeleteFileAction(this);
 		newFile = new NewFileAction(this);
@@ -45,6 +49,11 @@ public class ActionManager implements ActionManagerInterface {
 			return null;
 			// Should return mock manager! which needs to be created.
 		}
+	}
+
+	@Override
+	public MessageUtil getMessenger() {
+		return messenger;
 	}
 
 }

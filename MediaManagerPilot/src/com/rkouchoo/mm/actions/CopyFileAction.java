@@ -1,4 +1,4 @@
-package com.rkouchoo.fm.actions;
+package com.rkouchoo.mm.actions;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-import com.rkocuhoo.fm.interfaces.ActionInterface;
+import com.rkocuhoo.mm.interfaces.ActionInterface;
 
 @Deprecated
 public class CopyFileAction implements ActionInterface {

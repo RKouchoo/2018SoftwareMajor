@@ -1,4 +1,4 @@
-package com.rkouchoo.fm;
+package com.rkouchoo.mm;
 
 public class Constants {
 
@@ -24,5 +24,5 @@ public class Constants {
 	
 	public static final String WINDOW_ICON_PROJECT_PATH = "/res/exp_icon.png";
 	
-	
+	public static final int ROW_ICON_PADDING = 6;
 }

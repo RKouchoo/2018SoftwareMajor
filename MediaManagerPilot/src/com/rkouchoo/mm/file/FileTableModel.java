@@ -1,4 +1,4 @@
-package com.rkouchoo.fm.file;
+package com.rkouchoo.mm.file;
 
 import java.io.File;
 import java.util.Date;
@@ -9,7 +9,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.rkouchoo.fm.Constants;
+import com.rkouchoo.mm.Constants;
 
 public class FileTableModel extends AbstractTableModel {
 

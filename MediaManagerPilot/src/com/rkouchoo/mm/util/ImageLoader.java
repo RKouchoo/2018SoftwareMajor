@@ -1,4 +1,4 @@
-package com.rkouchoo.util;
+package com.rkouchoo.mm.util;
 
 import java.awt.Image;
 import java.net.URL;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.rkouchoo.fm.MediaManager;
+import com.rkouchoo.mm.MediaManager;
 
 public class ImageLoader {
 

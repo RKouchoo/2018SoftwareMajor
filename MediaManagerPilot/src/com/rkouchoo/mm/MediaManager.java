@@ -1,4 +1,4 @@
-package com.rkouchoo.fm;
+package com.rkouchoo.mm;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -11,40 +11,35 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
-
 import javax.swing.table.*;
 import javax.swing.filechooser.FileSystemView;
-import com.rkouchoo.fm.actions.ActionManager;
-import com.rkouchoo.fm.file.FileTableModel;
-import com.rkouchoo.fm.file.FileTreeCellRenderer;
-import com.rkouchoo.util.ImageLoader;
 
 import java.util.Date;
 import java.util.List;
 import java.io.*;
 
+import com.rkouchoo.mm.actions.ActionManager;
+import com.rkouchoo.mm.file.FileTableModel;
+import com.rkouchoo.mm.file.FileTreeCellRenderer;
+import com.rkouchoo.mm.util.ImageLoader;
+import com.rkouchoo.mm.util.MessageUtil;
+
 public class MediaManager {
 	
 	private Desktop desktop;
 	private FileSystemView fileSystemView;
-	public File currentFile;
-	public JPanel gui;
 	private JTree tree;
-	public DefaultTreeModel treeModel;
 	private JTable table;
 	private JProgressBar progressBar;
 	private FileTableModel fileTableModel;
 	private ListSelectionListener listSelectionListener;
 	private boolean cellSizesSet = false;
-	private int rowIconPadding = 6;
-
 	private JButton openFile;
 	private JButton printFile;
 	private JButton editFile;
 	private JButton deleteFile;
 	private JButton newFile;
-	private JButton copyFile;
-
+	private JButton renameFile;
 	private JLabel fileName;
 	private JTextField path;
 	private JLabel date;
@@ -54,76 +49,58 @@ public class MediaManager {
 	private JCheckBox executable;
 	private JRadioButton isDirectory;
 	private JRadioButton isFile;
-
+	private JPanel detailView;
+	private JScrollPane tableScroll;
+	private Dimension windowDimension;
+	private DefaultMutableTreeNode rootTreeModel;
+	private JToolBar windowToolbar;
+	
 	public JPanel newFilePanel;
 	public JRadioButton newTypeFile;
 	public JTextField name;
+	public File currentFile;
+	public JPanel uiPanel;
+	public DefaultTreeModel treeModel;
 	
 	private ActionManager actionManager;
+
+	private MessageUtil messenger;
 	
 	public MediaManager() {
-		actionManager = new ActionManager(this);
+		messenger = new MessageUtil(uiPanel);
+		actionManager = new ActionManager(this, messenger);
 	}
 
-	public Container getGui() {
+	public Container getUIPanel() {
 		
-		if (gui == null) {
-			gui = new JPanel(new BorderLayout(3, 3));
-			gui.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		if (uiPanel == null) {
+			
+			BorderLayout panelBorderLayout = new BorderLayout(3, 3);
+			BorderLayout detailBorderLayout = new BorderLayout(3, 3);
+			EmptyBorder uiEmptyBorder = new EmptyBorder(5, 5, 5, 5);
+			
+			uiPanel = new JPanel(panelBorderLayout);
+			uiPanel.setBorder(uiEmptyBorder);
 			fileSystemView = FileSystemView.getFileSystemView();
 			desktop = Desktop.getDesktop();
-
-			JPanel detailView = new JPanel(new BorderLayout(3, 3));
-
+			detailView = new JPanel(detailBorderLayout);
 			table = new JTable();
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setAutoCreateRowSorter(true);
 			table.setShowVerticalLines(false);
-
-			listSelectionListener = new ListSelectionListener() {
-				@Override
-				public void valueChanged(ListSelectionEvent lse) {
-					int row = table.getSelectionModel().getLeadSelectionIndex();
-					setFileDetails(((FileTableModel) table.getModel()).getFile(row));
-				}
-			};
-			table.getSelectionModel().addListSelectionListener(listSelectionListener);
-			
-			JScrollPane tableScroll = new JScrollPane(table);
-			
-			Dimension windowDimension = new Dimension(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
+			tableScroll = new JScrollPane(table);
+		    windowDimension = new Dimension(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
 			tableScroll.setPreferredSize(windowDimension);
 			detailView.add(tableScroll, BorderLayout.CENTER);
 
 			// the File tree
-			DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-			treeModel = new DefaultTreeModel(root);
+			rootTreeModel = new DefaultMutableTreeNode();
+			treeModel = new DefaultTreeModel(rootTreeModel);
 
-			TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
-				public void valueChanged(TreeSelectionEvent tse) {
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tse.getPath().getLastPathComponent();
-					showChildren(node);
-					setFileDetails((File) node.getUserObject());
-				}
-			};
-
-			// show the file system roots.
-			File[] roots = fileSystemView.getRoots();
-			for (File fileSystemRoot : roots) {
-				DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
-				root.add(node);
-				File[] files = fileSystemView.getFiles(fileSystemRoot, true);
-				for (File file : files) {
-					if (file.isDirectory()) {
-						node.add(new DefaultMutableTreeNode(file));
-					}
-				}
-			}
+			showFileSystemRoots(fileSystemView, rootTreeModel);
 
 			tree = new JTree(treeModel);
 			tree.setRootVisible(false);
-			tree.addTreeSelectionListener(treeSelectionListener);
 			tree.setCellRenderer(new FileTreeCellRenderer());
 			tree.expandRow(0);
 			tree.setVisibleRowCount(Constants.VISIBLE_ROW_COUNT);
@@ -174,133 +151,81 @@ public class MediaManager {
 			flags.add(isFile);
 			fileDetailsValues.add(flags);
 
-			int count = fileDetailsLabels.getComponentCount();
-			
-			for (int ii = 0; ii < count; ii++) {
-				fileDetailsLabels.getComponent(ii).setEnabled(false);
-			}
+			setLablesDisabled(fileDetailsLabels);
 
-			JToolBar toolBar = new JToolBar();
-			toolBar.setFloatable(false);
+			windowToolbar = new JToolBar();
+			windowToolbar.setFloatable(false);
 
 			openFile = new JButton("Open");
 			editFile = new JButton("Edit");
 			printFile = new JButton("Print");
-			
-			openFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ae) {
-					try {
-						desktop.open(currentFile);
-					} catch (Throwable t) {
-						showThrowable(t);
-					}
-					gui.repaint();
-				}
-			});
 
-			editFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ae) {
-					try {
-						desktop.edit(currentFile);
-					} catch (Throwable t) {
-						showThrowable(t);
-					}
-				}
-			});
-
-			printFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent ae) {
-					try {
-						desktop.print(currentFile);
-					} catch (Throwable t) {
-						showThrowable(t);
-					}
-				}
-			});
-
-			// Check the actions are supported on the current platform. Should be as it is run in windows for testing.
+			// Check the actions are supported on the current platform. Should be as it is
+			// run in windows for testing.
 			openFile.setEnabled(desktop.isSupported(Desktop.Action.OPEN));
 			editFile.setEnabled(desktop.isSupported(Desktop.Action.EDIT));
 			printFile.setEnabled(desktop.isSupported(Desktop.Action.PRINT));
 
 			newFile = new JButton("New");
-			JButton renameFile = new JButton("Rename");
+			renameFile = new JButton("Rename");
 			deleteFile = new JButton("Delete");
 			
-			newFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					actionManager.newFile();
-				}
-			});
+			doButtonHandling(); // make sure all the ui buttons are initialised and working.
 			
-			renameFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					actionManager.renameFile();
-				}
-			});
-
-			deleteFile.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					actionManager.deleteFile();
-				}
-			});
-			
+			/**
+			 * Add all the items to the panel and then return it.
+			 */		
 			readable = new JCheckBox("Read  ");
 			writable = new JCheckBox("Write  ");
 			executable = new JCheckBox("Execute");
 			
 			// add the elements to the toolbar
-			toolBar.add(openFile);
-			toolBar.add(editFile);
-			toolBar.add(printFile);
-			toolBar.addSeparator();
-			toolBar.add(newFile);
-			toolBar.add(renameFile);
-			toolBar.add(deleteFile);
-			toolBar.addSeparator();
-			toolBar.add(readable);
-			toolBar.add(writable);
-			toolBar.add(executable);
+			windowToolbar.add(openFile);
+			windowToolbar.add(editFile);
+			windowToolbar.add(printFile);
+			windowToolbar.addSeparator();
+			windowToolbar.add(newFile);
+			windowToolbar.add(renameFile);
+			windowToolbar.add(deleteFile);
+			windowToolbar.addSeparator();
+			windowToolbar.add(readable);
+			windowToolbar.add(writable);
+			windowToolbar.add(executable);
 
 			JPanel fileView = new JPanel(new BorderLayout(3, 3));
 
-			fileView.add(toolBar, BorderLayout.NORTH);
+			fileView.add(windowToolbar, BorderLayout.NORTH);
 			fileView.add(fileMainDetails, BorderLayout.CENTER);
 
 			detailView.add(fileView, BorderLayout.SOUTH);
-
 			JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeScroll, detailView);
-			gui.add(splitPane, BorderLayout.CENTER);
-
+			uiPanel.add(splitPane, BorderLayout.CENTER);
 			JPanel simpleOutput = new JPanel(new BorderLayout(3, 3));
 			progressBar = new JProgressBar();
-			simpleOutput.add(progressBar, BorderLayout.EAST);
+			simpleOutput.add(progressBar, BorderLayout.CENTER);
 			progressBar.setVisible(false);
 
-			gui.add(simpleOutput, BorderLayout.SOUTH);
-			
-			// Set up mnemonic binds, seems useless, could be removed at any point
-			executable.setMnemonic('x');
-			readable.setMnemonic('a');
-			deleteFile.setMnemonic('d');
-			newFile.setMnemonic('n');
-			printFile.setMnemonic('p');
-			editFile.setMnemonic('e');
-			openFile.setMnemonic('o');
-			writable.setMnemonic('w');
-			renameFile.setMnemonic('r');
+			uiPanel.add(simpleOutput, BorderLayout.SOUTH);	
 		}
-		return gui;
+		
+		return uiPanel;
 	}
 
+	/**
+	 * Make sure the files are displayed from the root node
+	 */
 	public void showRootFile() {
-		// ensure the main files are displayed
 		tree.setSelectionInterval(0, 0);
 	}
 
+	/**
+	 * Finds the location of a file in a tree.
+	 * @param find
+	 * @return
+	 */
 	public TreePath findTreePath(File find) {
-		for (int ii = 0; ii < tree.getRowCount(); ii++) {
-			TreePath treePath = tree.getPathForRow(ii);
+		for (int i = 0; i < tree.getRowCount(); i++) {
+			TreePath treePath = tree.getPathForRow(i);
 			Object object = treePath.getLastPathComponent();
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) object;
 			File nodeFile = (File) node.getUserObject();
@@ -312,21 +237,13 @@ public class MediaManager {
 		return null;
 	}
 
-	public void showErrorMessage(String errorMessage, String errorTitle) {
-		JOptionPane.showMessageDialog(gui, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
-	}
-
-	public void showThrowable(Throwable t) {
-		t.printStackTrace();
-		JOptionPane.showMessageDialog(gui, t.toString(), t.getMessage(), JOptionPane.ERROR_MESSAGE);
-		gui.repaint();
-	}
-
-	/** Update the table on the EDT */
+	/**
+	 * Updates the table from the new array of Files[]
+	 * @param files
+	 */
 	private void setTableData(final File[] files) {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				
+			public void run() {			
 				if (fileTableModel == null) {
 					fileTableModel = new FileTableModel();
 					table.setModel(fileTableModel);
@@ -335,11 +252,13 @@ public class MediaManager {
 				table.getSelectionModel().removeListSelectionListener(listSelectionListener);
 				fileTableModel.setFiles(files);
 				table.getSelectionModel().addListSelectionListener(listSelectionListener);
+				
+				// If the cells have not been sized properly, do it now.
 				if (!cellSizesSet) {
 					Icon icon = fileSystemView.getSystemIcon(files[0]);
 
 					// size adjustment to better account for icons
-					table.setRowHeight(icon.getIconHeight() + rowIconPadding);
+					table.setRowHeight(icon.getIconHeight() + Constants.ROW_ICON_PADDING);
 
 					// -1 for most of them so they automatically allocate thier space.
 					setColumnWidth(0, -1);
@@ -350,8 +269,10 @@ public class MediaManager {
 					setColumnWidth(6, -1);
 					setColumnWidth(7, -1);
 					setColumnWidth(8, 180);
+					
 					cellSizesSet = true;
 				}
+				
 			}
 		});
 	}
@@ -364,12 +285,14 @@ public class MediaManager {
 	 */
 	private void setColumnWidth(int column, int width) {
 		TableColumn tableColumn = table.getColumnModel().getColumn(column);
+		
 		if (width < 0) {
-			// use the preferred width of the header..
+			// use the preferred width of the header.
 			JLabel label = new JLabel((String) tableColumn.getHeaderValue());
 			Dimension preferred = label.getPreferredSize();
 			width = (int) preferred.getWidth() + 14;
 		}
+		
 		tableColumn.setPreferredWidth(width);
 		tableColumn.setMaxWidth(width);
 		tableColumn.setMinWidth(width);
@@ -380,10 +303,12 @@ public class MediaManager {
 	 */
 	public void showChildren(final DefaultMutableTreeNode node) {
 		tree.setEnabled(false);
-		progressBar.setVisible(true);
+		progressBar.setVisible(false); // TODO: this causes a visual bug, should be disabled if I cannot fix it, possibly just stretch the frame.
 		progressBar.setIndeterminate(true);
 
+		// Create a new swing worker that runs the tree and the table
 		SwingWorker<Void, File> worker = new SwingWorker<Void, File>() {
+		
 			@Override
 			public Void doInBackground() {
 				File file = (File) node.getUserObject();
@@ -415,7 +340,13 @@ public class MediaManager {
 				tree.setEnabled(true);
 			}
 		};
+		
 		worker.execute();
+		
+		if (!worker.isDone()) {
+			worker.execute();
+		}
+		
 	}
 
 	/**
@@ -423,8 +354,7 @@ public class MediaManager {
 	 * @param file
 	 */
 	private void setFileDetails(File file) {
-		currentFile = file;
-		Icon icon = fileSystemView.getSystemIcon(file);
+		this.currentFile = file;
 		fileName.setText(fileSystemView.getSystemDisplayName(file));
 		path.setText(file.getPath());
 		date.setText(new Date(file.lastModified()).toString());
@@ -433,44 +363,173 @@ public class MediaManager {
 		writable.setSelected(file.canWrite());
 		executable.setSelected(file.canExecute());
 		isDirectory.setSelected(file.isDirectory());
-
 		isFile.setSelected(file.isFile());
-
-		JFrame f = (JFrame) gui.getTopLevelAncestor();
-		
-		if (f != null) {
-			f.setTitle(Constants.WINDOW_TITLE + " : " + fileSystemView.getSystemDisplayName(file));
-		} 
-		gui.repaint();
+		updateWindowTitle(file);
+		uiPanel.repaint();
 	}
 	
+	/**
+	 * Updates the window title based on which folder/file is selected. 
+	 * @param file
+	 */
+	private void updateWindowTitle(File file) {
+		JFrame f = (JFrame) uiPanel.getTopLevelAncestor();
+		if (f != null) {
+			f.setTitle(Constants.WINDOW_TITLE + " : " + fileSystemView.getSystemDisplayName(file));
+		} 		
+	}
+	
+	/**
+	 * TODO: be moved to a utils class!
+	 * Sets all of the labes in a panel to disbaled.
+	 * @param fileDetailsLabels
+	 */
+	public void setLablesDisabled(JPanel fileDetailsLabels) {
+		int count = fileDetailsLabels.getComponentCount();
+		for (int i = 0; i < count; i++) {
+			fileDetailsLabels.getComponent(i).setEnabled(false);
+		}
+	}
+	
+	/**
+	 * Shows the roots of the file system to allow
+	 * @param view
+	 * @param root
+	 */
+	public void showFileSystemRoots(FileSystemView view, DefaultMutableTreeNode root) {
+		// show the file system roots.
+		File[] roots = view.getRoots();
+		for (File fileSystemRoot : roots) {
+			DefaultMutableTreeNode node = new DefaultMutableTreeNode(fileSystemRoot);
+			root.add(node);
+			File[] files = view.getFiles(fileSystemRoot, true);
+			for (File file : files) {
+				if (file.isDirectory()) {
+					node.add(new DefaultMutableTreeNode(file));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Sets the look and feel based on the operating system. 
+	 * If it doesnt recognise your OS it will use the default java theme.
+	 */
+	public void setSystemLookAndFeel() {
+		try {
+			// Significantly improves the look of the output in terms of the file names returned by FileSystemView!
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			// erm.. couldn't find your operating system?! kk will just use the default java theme.
+		}
+	}
+	
+	/**
+	 * Sets the window icon image, in the top left of the window and the icon on the desktop window manager.
+	 * @param frame
+	 * @param manager
+	 * @param path
+	 */
+	public void setWindowIconImage(JFrame frame, MediaManager manager, String path) {
+		try {
+			frame.setIconImages(ImageLoader.loadIconImages(manager, path));
+		} catch (Exception e) {
+			System.err.println("Failed to load ICON images for the application");
+		}
+
+	}
+	
+	/**
+	 * Create all of the button press listeners and make sure that they work.
+	 */
+	public void doButtonHandling() {
+		TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent tse) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tse.getPath().getLastPathComponent();
+				showChildren(node);
+				setFileDetails((File) node.getUserObject());
+			}
+		};
+		tree.addTreeSelectionListener(treeSelectionListener);
+
+		listSelectionListener = new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent lse) {
+				int row = table.getSelectionModel().getLeadSelectionIndex();
+				setFileDetails(((FileTableModel) table.getModel()).getFile(row));
+			}
+		};
+		table.getSelectionModel().addListSelectionListener(listSelectionListener);
+
+		openFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				try {
+					desktop.open(currentFile);
+				} catch (Throwable t) {
+					messenger.showThrowable(t);
+				}
+				uiPanel.repaint();
+			}
+		});
+
+		editFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				try {
+					desktop.edit(currentFile);
+				} catch (Throwable t) {
+					messenger.showThrowable(t);
+				}
+			}
+		});
+
+		printFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ae) {
+				try {
+					desktop.print(currentFile);
+				} catch (Throwable t) {
+					messenger.showThrowable(t);
+				}
+			}
+		});
+
+		newFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionManager.newFile();
+			}
+		});
+
+		renameFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionManager.renameFile();
+			}
+		});
+
+		deleteFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionManager.deleteFile();
+			}
+		});
+	}
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					// Significantly improves the look of the output in terms of the file names returned by FileSystemView!
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (Exception e) {
-					// erm.. couldn't find your operating system?! kk will just use the default java theme.
-				}
+			public void run() {			
+				MediaManager mediaManager = new MediaManager();
+				mediaManager.setSystemLookAndFeel();
 				
-				MediaManager fileManager = new MediaManager();
 				JFrame frame = new JFrame(Constants.WINDOW_TITLE);
+				
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
-				frame.setContentPane(fileManager.getGui());
-
-				try {
-					frame.setIconImages(ImageLoader.loadIconImages(fileManager, Constants.WINDOW_ICON_PROJECT_PATH));
-				} catch (Exception e) {
-					System.err.println("Failed to load ICON images for the application");
-				}
-
+				frame.setContentPane(mediaManager.getUIPanel());
+				
+				mediaManager.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PROJECT_PATH);
+		
 				frame.pack();
 				frame.setLocationByPlatform(Constants.WINDOW_NATIVE_LOCATION);
 				frame.setMinimumSize(frame.getSize());
 				frame.setVisible(true);
-				fileManager.showRootFile();
+				
+				mediaManager.showRootFile();
 			}
 		});
 	}

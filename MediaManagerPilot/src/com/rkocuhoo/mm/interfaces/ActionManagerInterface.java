@@ -1,6 +1,7 @@
-package com.rkocuhoo.fm.interfaces;
+package com.rkocuhoo.mm.interfaces;
 
-import com.rkouchoo.fm.MediaManager;
+import com.rkouchoo.mm.MediaManager;
+import com.rkouchoo.mm.util.MessageUtil;
 
 /**
  * Interface that defines the actions that will need to be run though the buttons on the GUI.
@@ -9,6 +10,8 @@ import com.rkouchoo.fm.MediaManager;
 public interface ActionManagerInterface {
 
 	public MediaManager getManager();
+	
+	public MessageUtil getMessenger();
 	
 	public void renameFile();
 	

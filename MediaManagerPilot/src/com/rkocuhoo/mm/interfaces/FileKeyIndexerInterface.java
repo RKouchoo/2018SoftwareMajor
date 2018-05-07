@@ -1,4 +1,4 @@
-package com.rkocuhoo.fm.interfaces;
+package com.rkocuhoo.mm.interfaces;
 
 import java.io.File;
 

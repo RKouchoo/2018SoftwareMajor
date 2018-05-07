@@ -1,4 +1,4 @@
-package backup;
+package org.rkouchoo.mm.backup;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -16,9 +16,9 @@ import javax.swing.table.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.imageio.ImageIO;
 
-import com.rkouchoo.fm.Constants;
-import com.rkouchoo.fm.file.FileTableModel;
-import com.rkouchoo.fm.file.FileTreeCellRenderer;
+import com.rkouchoo.mm.Constants;
+import com.rkouchoo.mm.file.FileTableModel;
+import com.rkouchoo.mm.file.FileTreeCellRenderer;
 
 import java.util.Date;
 import java.util.List;

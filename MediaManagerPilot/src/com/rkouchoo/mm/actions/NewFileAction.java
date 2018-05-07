@@ -1,4 +1,4 @@
-package com.rkouchoo.fm.actions;
+package com.rkouchoo.mm.actions;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.rkocuhoo.fm.interfaces.ActionInterface;
+import com.rkocuhoo.mm.interfaces.ActionInterface;
 
 public class NewFileAction implements ActionInterface {
 
@@ -26,7 +26,7 @@ public class NewFileAction implements ActionInterface {
 	@Override
 	public void run() {
 		if (manager.getManager().currentFile == null) {
-			manager.getManager().showErrorMessage("No location selected for new file.", "Select Location");
+			manager.getMessenger().showErrorMessage("No location selected for new file.", "Select Location");
 			return;
 		}
 
@@ -49,7 +49,7 @@ public class NewFileAction implements ActionInterface {
 			manager.getManager().newFilePanel.add(southRadio, BorderLayout.SOUTH);
 		}
 
-		int result = JOptionPane.showConfirmDialog(manager.getManager().gui, manager.getManager().newFilePanel, "Create File", JOptionPane.OK_CANCEL_OPTION);
+		int result = JOptionPane.showConfirmDialog(manager.getManager().uiPanel, manager.getManager().newFilePanel, "Create File", JOptionPane.OK_CANCEL_OPTION);
 		
 		if (result == JOptionPane.OK_OPTION) {
 			try {
@@ -78,12 +78,12 @@ public class NewFileAction implements ActionInterface {
 					manager.getManager().showChildren(parentNode);
 				} else {
 					String msg = "The file '" + file + "' could not be created.";
-					manager.getManager().showErrorMessage(msg, "Create Failed");
+					manager.getMessenger().showErrorMessage(msg, "Create Failed");
 				}
 			} catch (Throwable t) {
-				manager.getManager().showThrowable(t);
+				manager.getMessenger().showThrowable(t);
 			}
 		}
-		manager.getManager().gui.repaint();
+		manager.getManager().uiPanel.repaint();
 	}
 }

@@ -1,10 +1,10 @@
-package com.rkouchoo.fm.actions;
+package com.rkouchoo.mm.actions;
 
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.rkocuhoo.fm.interfaces.ActionInterface;
+import com.rkocuhoo.mm.interfaces.ActionInterface;
 
 public class DeleteFileAction implements ActionInterface{
 	
@@ -17,11 +17,11 @@ public class DeleteFileAction implements ActionInterface{
 	@Override
 	public void run() {
 		if (manager.getManager().currentFile == null) {
-			manager.getManager().showErrorMessage("No file selected for deletion.", "Select File");
+			manager.getMessenger().showErrorMessage("No file selected for deletion.", "Select File");
 			return;
 		}
 
-		int result = JOptionPane.showConfirmDialog(manager.getManager().gui, "Are you sure you want to delete this file?", "Delete File",
+		int result = JOptionPane.showConfirmDialog(manager.getManager().uiPanel, "Are you sure you want to delete this file?", "Delete File",
 				JOptionPane.ERROR_MESSAGE);
 		if (result == JOptionPane.OK_OPTION) {
 			try {
@@ -46,12 +46,12 @@ public class DeleteFileAction implements ActionInterface{
 					manager.getManager().showChildren(parentNode);
 				} else {
 					String msg = "The file '" + manager.getManager().currentFile + "' could not be deleted.";
-					manager.getManager().showErrorMessage(msg, "Delete Failed");
+					manager.getMessenger().showErrorMessage(msg, "Delete Failed");
 				}
 			} catch (Throwable t) {
-				manager.getManager().showThrowable(t);
+				manager.getMessenger().showThrowable(t);
 			}
 		}
-		manager.getManager().gui.repaint();
+		manager.getManager().uiPanel.repaint();
 	}
 }

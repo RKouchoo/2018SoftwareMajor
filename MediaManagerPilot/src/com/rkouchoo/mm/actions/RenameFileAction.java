@@ -1,4 +1,4 @@
-package com.rkouchoo.fm.actions;
+package com.rkouchoo.mm.actions;
 
 import java.io.File;
 
@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.rkocuhoo.fm.interfaces.ActionInterface;
+import com.rkocuhoo.mm.interfaces.ActionInterface;
 
 public class RenameFileAction implements ActionInterface {
 	
@@ -19,11 +19,11 @@ public class RenameFileAction implements ActionInterface {
 	@Override
 	public void run() {
 		if (master.getManager().currentFile == null) {
-			master.getManager().showErrorMessage("No file selected to rename.", "Select File");
+			master.getMessenger().showErrorMessage("No file selected to rename.", "Select File");
 			return;
 		}
 
-		String renameTo = JOptionPane.showInputDialog(master.getManager().gui, "New Name");
+		String renameTo = JOptionPane.showInputDialog(master.getManager().uiPanel, "New Name");
 		if (renameTo != null) {
 			try {
 				boolean directory = master.getManager().currentFile.isDirectory();
@@ -43,16 +43,16 @@ public class RenameFileAction implements ActionInterface {
 					master.getManager().showChildren(parentNode);
 				} else {
 					String msg = "The file '" + master.getManager().currentFile + "' could not be renamed.";
-					master.getManager().showErrorMessage(msg, "Rename Failed");
+					master.getMessenger().showErrorMessage(msg, "Rename Failed");
 				}
 				
 				
 			} catch (Throwable t) {
 				// For some reason when a folder is renamed it throws an exception but works anyway? I am not sure why this happens. please send help
-				master.getManager().gui.repaint();
+				master.getManager().uiPanel.repaint();
 			}
 		}
-		master.getManager().gui.repaint();
+		master.getManager().uiPanel.repaint();
 	}
 
 }
