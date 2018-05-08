@@ -8,8 +8,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class FileKeyIndexer {
 
-	public FileKeyIndexer(/*json object goes in here */) {
-		// TODO Auto-generated constructor stub
+	public FileKeyIndexer() {
+	
 	}
 	
 	public static void indexFile(File file) throws Throwable {
@@ -20,7 +20,5 @@ public class FileKeyIndexer {
 		
 		// I dont need attrs anymore! trying to optimise to make the program faster when making comments
 		System.gc();
-		
 	}
-
 }

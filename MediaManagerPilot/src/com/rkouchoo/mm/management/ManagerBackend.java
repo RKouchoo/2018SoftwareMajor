@@ -1,6 +1,5 @@
 package com.rkouchoo.mm.management;
 
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,18 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -31,7 +21,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import com.rkouchoo.mm.Constants;
@@ -140,7 +129,7 @@ public class ManagerBackend extends MediaManager {
 	 */
 	public void showChildren(final DefaultMutableTreeNode node) {
 		tree.setEnabled(false);
-		progressBar.setVisible(false); // TODO: this causes a visual bug, should be disabled if I cannot fix it, possibly just stretch the frame.
+		progressBar.setVisible(false); // TODO: this causes a visual bug, is disabled at the moment as i have not fixed it.
 		progressBar.setIndeterminate(true);
 
 		// Create a new swing worker that runs the tree and the table
