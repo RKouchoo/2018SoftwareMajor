@@ -2,9 +2,8 @@ package com.rkouchoo.mm;
 
 public class Constants {
 
-	/** Title of the application */
-	public static final String WINDOW_TITLE = "Media Manager";
-	public static final int WINDOW_WIDTH = 1280;
+	public static final String WINDOW_TITLE = "Media Manager"; // title of the window
+	public static final int WINDOW_WIDTH = 1280; // screen resoution
 	public static final int WINDOW_HEIGHT = 720;
 	public static final boolean WINDOW_NATIVE_LOCATION = false;
 	
@@ -23,6 +22,7 @@ public class Constants {
 	};
 	
 	public static final String WINDOW_ICON_PROJECT_PATH = "/res/exp_icon.png";
-	
 	public static final int ROW_ICON_PADDING = 6;
+	
+	public static final String HIDDEN_FILE_NAME = ".fmeta"; // short for file meta
 }

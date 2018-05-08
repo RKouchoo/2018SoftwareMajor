@@ -3,21 +3,28 @@ package com.rkouchoo.mm.file;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.rkouchoo.mm.Constants;
+import com.rkouchoo.mm.util.MessageUtil;
 
 public class FileKeyIndexer {
 	
 	private static Gson gson;
 	private static List<String> fileKeys;
+	private static MessageUtil messenger;
 	
-	public FileKeyIndexer(Gson gsonObject) {
+	public FileKeyIndexer(Gson gsonObject, MessageUtil messenger) {
 		FileKeyIndexer.gson = gsonObject; // TODO: do I need to pass this in or should it be created here.
 		fileKeys = new ArrayList<String>();
+		FileKeyIndexer.messenger = messenger;
 	}
 	
 	public static void indexFile(File[] files) throws Throwable {
@@ -55,7 +62,13 @@ public class FileKeyIndexer {
 	 * @param jsonString
 	 */
 	public static void WriteOutJson(String path, String jsonString) {
-		
+		try (Writer writer = new FileWriter(path + Constants.HIDDEN_FILE_NAME)) {
+		    Gson gson = new GsonBuilder().create();
+		    gson.toJson(jsonString, writer);
+		} catch (Throwable t) {
+			messenger.showThrowable(t);
+			messenger.showErrorMessage("Failed to write out comment!", "Comment failure");
+		}
 	}
 	
 }
