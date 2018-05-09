@@ -102,7 +102,10 @@ public class SelectedFileComment {
 	 * cleans up the lists storage.
 	 */
 	private void cleanUp() {
-		
+		this.workingDir = null;
+		this.commentsList = null;
+		this.workingDirKeys = null;
+		this.writeableString = null;
 	}
 }
 
