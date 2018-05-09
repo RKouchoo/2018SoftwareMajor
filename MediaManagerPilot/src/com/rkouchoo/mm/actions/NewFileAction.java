@@ -15,6 +15,11 @@ import javax.swing.tree.TreePath;
 
 import com.rkocuhoo.mm.interfaces.ActionInterface;
 
+/**
+ * Messy logic that needs to be cleaned up at some time.
+ * @author KOUC01
+ *
+ */
 public class NewFileAction implements ActionInterface {
 
 	ActionManager manager;
@@ -32,6 +37,9 @@ public class NewFileAction implements ActionInterface {
 
 		if (manager.getMediaManager().newFilePanel == null) {
 			
+			/**
+			 * Create the popup window.
+			 */
 			manager.getMediaManager().newFilePanel = new JPanel(new BorderLayout(3, 3));
 			JPanel southRadio = new JPanel(new GridLayout(1, 0, 2, 2));
 			manager.getMediaManager().newTypeFile = new JRadioButton("File", true);

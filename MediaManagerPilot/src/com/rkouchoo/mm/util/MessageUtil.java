@@ -31,7 +31,7 @@ public class MessageUtil {
 			JOptionPane.showMessageDialog(uiPanel, throwableError.toString(), throwableError.getMessage(), JOptionPane.ERROR_MESSAGE);
 			uiPanel.repaint();		
 		}
-		// still want to print the error anyway
+		// still want to print the error anyway to the console.
 		throwableError.printStackTrace();
 	}
 	

@@ -80,7 +80,7 @@ public class ManagerBackend extends MediaManager {
 				table.getSelectionModel().addListSelectionListener(listSelectionListener);
 				
 				// If the cells have not been sized properly, do it now.
-				if (!cellSizesSet) {
+				if (!haveCellSizesBeenSet) {
 					Icon icon = fileSystemView.getSystemIcon(files[0]);
 
 					// size adjustment to better account for icons
@@ -96,7 +96,7 @@ public class ManagerBackend extends MediaManager {
 					setColumnWidth(7, -1);
 					setColumnWidth(8, 180);
 					
-					cellSizesSet = true;
+					haveCellSizesBeenSet = true;
 				}
 				
 			}
@@ -180,7 +180,7 @@ public class ManagerBackend extends MediaManager {
 	 * @param file
 	 */
 	private void setFileDetails(File file) {
-		this.currentFile = file;
+		currentFile = file;
 		fileName.setText(fileSystemView.getSystemDisplayName(file));
 		path.setText(file.getPath());
 		date.setText(new Date(file.lastModified()).toString());

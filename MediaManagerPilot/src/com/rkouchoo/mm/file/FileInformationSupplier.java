@@ -5,12 +5,12 @@ package com.rkouchoo.mm.file;
  * @author KOUC01
  *
  */
-public class FileCommentSupplier {
+public class FileInformationSupplier {
 	
 	private String uniqueFileID;
 	private String comment;
 	
-	public FileCommentSupplier(String id, String comment) {
+	public FileInformationSupplier(String id, String comment) {
 		this.uniqueFileID = id;
 		this.comment = comment;
 	}
@@ -23,7 +23,8 @@ public class FileCommentSupplier {
 		return comment;
 	}
 	
-	// there is no reason why I set the comments, but it works anyway.
+	// there is no reason why I set the comments, but it works anyway
+	// part of eclipses auto generate getter and setter tool.
 	
 	public void setUniqueFileID(String uniqueFileID) {
 		this.uniqueFileID = uniqueFileID;
