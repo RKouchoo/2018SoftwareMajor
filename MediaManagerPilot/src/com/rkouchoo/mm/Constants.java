@@ -7,6 +7,8 @@ public class Constants {
 	public static final int WINDOW_HEIGHT = 720;
 	public static final boolean WINDOW_NATIVE_LOCATION = false;
 	
+	public static final boolean MAKE_HIDDEN_FILES = false;
+	
 	public static final int VISIBLE_ROW_COUNT = 15;
 	
 	public static final String[] TAB_NAMES = {

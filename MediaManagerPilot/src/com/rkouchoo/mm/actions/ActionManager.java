@@ -2,7 +2,6 @@ package com.rkouchoo.mm.actions;
 
 import com.rkocuhoo.mm.interfaces.ActionManagerInterface;
 import com.rkouchoo.mm.management.ManagerBackend;
-import com.rkouchoo.mm.management.MediaManager;
 import com.rkouchoo.mm.util.MessageUtil;
 
 public class ActionManager implements ActionManagerInterface {

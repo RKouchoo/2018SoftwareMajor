@@ -75,11 +75,13 @@ public class FileKeyIndexer {
 	 * @param path
 	 * @param jsonString
 	 */
-	public void writeOutJson(String path, String jsonString) {
+	public void writeOutJson(String path, String jsonString, boolean hidden) {
 		try (Writer writer = new FileWriter(path + Constants.HIDDEN_FILE_NAME)) {
 		    Gson gson = new GsonBuilder().setPrettyPrinting().create(); // create the gson object with pretty prining
 		    gson.toJson(jsonString, writer);
-		    makeHidden(path + Constants.HIDDEN_FILE_NAME);
+		    if (hidden) { // if the file is to be hidden make it.
+		    	makeHidden(path + Constants.HIDDEN_FILE_NAME);
+		    }
 		} catch (Throwable t) {
 			messenger.showThrowable(t);
 			messenger.showErrorMessage("Failed to write out comment!", "Comment failure");
