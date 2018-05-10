@@ -27,11 +27,27 @@ public class SelectedFileComment {
 		this.messenger = msg;
 		this.fileIndexer = new FileKeyIndexer(messenger);
 	}
-	
+
+	/**
+	 * Main commenting method, handles all usecases
+	 * @param dir = current directory
+	 * @param files = array of files in the directory
+	 * @param fileKey = the selected files key
+	 * @param comment = the comment the user has given
+	 * @throws Throwable :P shot myself in the ass putting this here.
+	 */
 	public void doComment(File dir, File[] files, String fileKey, String comment) throws Throwable {
 		quickIndex(dir, files, fileKey, comment);
 	}
 	
+	/**
+	 * private helper method.
+	 * @param dir = current directory
+	 * @param files = array of files in the directory
+	 * @param fileKey = the selected files key
+	 * @param comment = the comment the user has given
+	 * @throws Throwable
+	 */
 	private void quickIndex(File dir, File[] files, String fileKey, String comment) throws Throwable {
 		boolean continueIndex;
 		
@@ -59,13 +75,19 @@ public class SelectedFileComment {
 			this.writeableString = fileIndexer.generateJSONString(workingDirKeys, commentsList); // convert those lists to FileInformationSuppliers, then into a json string.
 			
 			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES); // write out the json strings in the current directory
-		}
-		
+		}	
 	}
 	
+	/**
+	 * Generates a list of comments, 
+	 * with one string embedded in the right place.
+	 * @param fileKeys
+	 * @param fileKey
+	 * @param comment
+	 * @return
+	 */
 	private List<String> generateCommentList(List<String> fileKeys, String fileKey, String comment) {
 		List<String> comments = new ArrayList<String>();
-		
 		if(fileKeys.contains(fileKey)) {
 			int pos = fileKeys.indexOf(fileKey); // get the position of the key related to the comment so they are the same.
 			// populate the list with nulls or the comment in the correct position.
@@ -73,16 +95,20 @@ public class SelectedFileComment {
 				if (i == pos) {
 					comments.add(comment); // put the comment in the corresponding place.
 				} else {
-					comments.add(null); // debatign weather this should be null or it should be "" 
+					comments.add(null); // debating weather this should be null or it should be "" 
 				}
 			}
-			
 		}
 		return comments;
 	}
 
 	/**
-	 * Should only be run if something is being updated.
+	 * Updates pre existing lists then writes it out to a file.
+	 * @param keys = ArrayList of keys
+	 * @param comments = ArrayList of comments
+	 * @param key = the current unique file that is being commented on.
+	 * @param comment = the comment to be added
+	 * @param dir = the current working directory
 	 */
 	private void updateLists(List<String> keys, List<String> comments, String key, String comment, File dir) {
 		// check if using this method is valid.
@@ -92,17 +118,17 @@ public class SelectedFileComment {
 			
 			// generate the new json string and then write it out into the directory.
 			this.writeableString = fileIndexer.generateJSONString(keys, comments);
-			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES);
-			
+			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES);	
+		} else {
+			messenger.showErrorMessage("Cannot save comment, already contains comment!", "Commenting error");
 		}
-		
 	}
 	
 	/**
 	 * cleans up the lists storage.
 	 */
 	private void cleanUp() {
-		this.workingDir = null;
+		this.workingDir = null; // I can do all of the for loops but requires extra effort and less efficient. 
 		this.commentsList = null;
 		this.workingDirKeys = null;
 		this.writeableString = null;
