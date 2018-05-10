@@ -14,6 +14,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.rkouchoo.mm.Constants;
+import com.rkouchoo.mm.util.FileInformationSupplier;
 import com.rkouchoo.mm.util.MessageUtil;
 
 public class FileKeyIndexer {

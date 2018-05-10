@@ -1,4 +1,4 @@
-package com.rkouchoo.mm.file;
+package com.rkouchoo.mm.util;
 
 /**
  * A class that holds information about files, will be used with gson.

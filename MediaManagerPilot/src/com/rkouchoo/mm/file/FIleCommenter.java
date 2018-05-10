@@ -12,7 +12,7 @@ import com.rkouchoo.mm.util.MessageUtil;
  * @author KOUC01
  *
  */
-public class SelectedFileComment {
+public class FIleCommenter {
 	
 	private FileKeyIndexer fileIndexer;
 	private MessageUtil messenger;
@@ -20,10 +20,9 @@ public class SelectedFileComment {
 	private File workingDir;
 	private List<String> workingDirKeys;
 	private List<String> commentsList;
-	
 	private String writeableString;
 	
-	public SelectedFileComment(MessageUtil msg) {
+	public FIleCommenter(MessageUtil msg) {
 		this.messenger = msg;
 		this.fileIndexer = new FileKeyIndexer(messenger);
 	}
@@ -34,10 +33,14 @@ public class SelectedFileComment {
 	 * @param files = array of files in the directory
 	 * @param fileKey = the selected files key
 	 * @param comment = the comment the user has given
-	 * @throws Throwable :P shot myself in the ass putting this here.
 	 */
-	public void doComment(File dir, File[] files, String fileKey, String comment) throws Throwable {
-		quickIndex(dir, files, fileKey, comment);
+	public void doComment(File dir, File[] files, String fileKey, String comment) {
+		try {
+			quickIndex(dir, files, fileKey, comment);
+		} catch (Throwable t) {
+			messenger.showErrorMessage("Failed to run doComment", "Commenting error");
+			messenger.showThrowable(t);
+		}
 	}
 	
 	/**
@@ -50,7 +53,6 @@ public class SelectedFileComment {
 	 */
 	private void quickIndex(File dir, File[] files, String fileKey, String comment) throws Throwable {
 		boolean continueIndex;
-		
 		if (dir.equals(this.workingDir)) {
 			// no need to index anything, program has run in this directory before.
 			// update the already made lists with a new comment.
@@ -114,8 +116,7 @@ public class SelectedFileComment {
 		// check if using this method is valid.
 		if (keys.contains(key) && !comments.contains(comment)) {
 			int pos = keys.indexOf(key);
-			comments.add(pos, comment); // get the pos and then update the pos.
-			
+			comments.add(pos, comment); // get the pos and then update the pos.			
 			// generate the new json string and then write it out into the directory.
 			this.writeableString = fileIndexer.generateJSONString(keys, comments);
 			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES);	
