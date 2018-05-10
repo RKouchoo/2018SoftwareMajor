@@ -1,4 +1,4 @@
-package com.rkouchoo.mm.file;
+package com.rkouchoo.mm.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.rkouchoo.mm.util.FileInformationSupplier;
 
 public class JsonFileReader {
 	
