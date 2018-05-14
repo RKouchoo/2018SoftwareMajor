@@ -12,7 +12,7 @@ import com.rkouchoo.mm.util.MessageUtil;
  * @author KOUC01
  *
  */
-public class FIleCommenter {
+public class FileCommenter {
 	
 	private FileKeyIndexer fileIndexer;
 	private MessageUtil messenger;
@@ -22,7 +22,7 @@ public class FIleCommenter {
 	private List<String> commentsList;
 	private String writeableString;
 	
-	public FIleCommenter(MessageUtil msg) {
+	public FileCommenter(MessageUtil msg) {
 		this.messenger = msg;
 		this.fileIndexer = new FileKeyIndexer(messenger);
 	}
