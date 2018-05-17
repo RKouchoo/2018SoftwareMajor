@@ -55,11 +55,20 @@ public class FileCommenter {
 	 */
 	private void quickIndex(File dir, File[] files, String fileKey, String comment) throws Throwable {
 		boolean continueIndex;
-		if (dir.equals(this.workingDir)) {
-			// no need to index anything, program has run in this directory before.
-			// update the already made lists with a new comment.
-			updateLists(this.workingDirKeys, this.commentsList, fileKey, comment, dir);
-			return;
+		String workingDir;
+		String currentDir;
+		
+		if (this.workingDir != null) {
+			currentDir = dir.getParentFile().getAbsolutePath() + "\\";
+			workingDir = this.workingDir.getParentFile().getAbsolutePath() + "\\";
+			
+			if (currentDir.equals(workingDir)) {
+				// no need to index anything, program has run in this directory before.
+				// update the already made lists with a new comment.
+				System.out.println("updating comment dictionary");
+				updateLists(this.workingDirKeys, this.commentsList, fileKey, comment, dir);
+				return;
+			}	
 		}
 		
 		// assign it if it doesnt actually exist
@@ -77,13 +86,10 @@ public class FileCommenter {
 			this.workingDirKeys = fileIndexer.indexFile(files);			
 			this.commentsList = generateCommentList(this.workingDirKeys, fileKey, comment);
 			
-			// need to convert these strings to joint object!!!!!
+			// need to convert these strings to joint object!!!!!			
 			
-			
-			
-			this.writeableString = fileIndexer.generateJSONString(workingDirKeys, commentsList); // convert those lists to FileInformationSuppliers, then into a json string.
-			
-			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES); // write out the json strings in the current directory
+			this.writeableString = fileIndexer.generateJSONString(this.workingDirKeys, this.commentsList); // convert those lists to FileInformationSuppliers, then into a json string.
+			fileIndexer.writeOutJson(dir.getParentFile().getAbsolutePath() + "\\", this.writeableString, Constants.MAKE_HIDDEN_FILES); // write out the json strings in the current directory
 		}	
 	}
 	
@@ -104,7 +110,7 @@ public class FileCommenter {
 				if (i == pos) {
 					comments.add(comment); // put the comment in the corresponding place.
 				} else {
-					comments.add(null); // debating weather this should be null or it should be "" 
+					comments.add(""); // debating weather this should be null or it should be "" 
 				}
 			}
 		}
@@ -126,18 +132,10 @@ public class FileCommenter {
 			comments.add(pos, comment); // get the pos and then update the pos.			
 			// generate the new json string and then write it out into the directory.
 			this.writeableString = fileIndexer.generateJSONString(keys, comments);
-			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES);	
+			fileIndexer.writeOutJson(dir.getParentFile().getAbsolutePath() + "\\", this.writeableString, Constants.MAKE_HIDDEN_FILES);	
 		} else {
 			messenger.showErrorMessage("Cannot save comment, already contains comment!", "Commenting error");
 		}
-	}
-	
-	private List<FileInformationSupplier> generateSupplierList(List<String> keys, List<String> comments) {
-		List<FileInformationSupplier> suppliers = new ArrayList<FileInformationSupplier>();
-		for (String key : keys) {
-			suppliers.add(new FileInformationSupplier(key, comments.iterator().next()));
-		}
-		return suppliers;
 	}
 	
 	/**

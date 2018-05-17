@@ -10,7 +10,8 @@ import java.io.Writer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.rkouchoo.mm.Constants;
 import com.rkouchoo.mm.util.FileHash;
 import com.rkouchoo.mm.util.FileInformationSupplier;
@@ -75,10 +76,11 @@ public class FileKeyIndexer {
 	 * @param jsonString
 	 */
 	public void writeOutJson(String path, String jsonString, boolean hidden) {
-		System.out.println("Writing file to cache");
+		System.out.println("Writing file to cache" + path + Constants.HIDDEN_FILE_NAME);
 		try (Writer writer = new FileWriter(path + Constants.HIDDEN_FILE_NAME)) {
 		    Gson gson = new GsonBuilder().setPrettyPrinting().create(); // create the gson object with pretty prining
-		    gson.toJson(jsonString, writer);
+		    JsonElement jsonElement = new JsonParser().parse(jsonString);
+		    gson.toJson(jsonElement, writer);
 		    
 		    if (hidden) { // if the file is to be hidden make it.
 		    	makeHidden(path + Constants.HIDDEN_FILE_NAME);
