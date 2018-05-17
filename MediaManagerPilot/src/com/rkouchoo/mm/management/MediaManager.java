@@ -57,10 +57,18 @@ public class MediaManager {
 	protected JPanel detailView;
 	protected JScrollPane tableScroll;
 	protected JToolBar windowToolbar;
+	protected JButton refreshButton;
+	protected JButton makeCommentButton;
+	protected JButton removeCommentButton;
+	protected JButton clearAllCommentButton;
+
 	public JPanel newFilePanel;
+	public JPanel commentPanel;
 	public JRadioButton newTypeFile;
 	public JTextField name;
 	public JPanel uiPanel;
+	
+	public File[] currentDirectoryFiles;
 	
 	/*
 	 * my classes 

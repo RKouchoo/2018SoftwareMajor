@@ -41,6 +41,7 @@ public class DeleteFileAction implements ActionInterface{
 						DefaultMutableTreeNode currentNode = (DefaultMutableTreeNode) currentPath.getLastPathComponent();
 
 						manager.getMediaManager().treeModel.removeNodeFromParent(currentNode);
+						manager.getMediaManager().uiPanel.repaint();
 					}
 
 					manager.getMediaManager().showChildren(parentNode);
@@ -48,6 +49,7 @@ public class DeleteFileAction implements ActionInterface{
 					String msg = "The file '" + manager.getMediaManager().currentFile + "' could not be deleted.";
 					manager.getMessenger().showErrorMessage(msg, "Delete Failed");
 				}
+				manager.getMediaManager().uiPanel.repaint();
 			} catch (Throwable t) {
 				manager.getMessenger().showThrowable(t);
 			}

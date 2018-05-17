@@ -18,4 +18,6 @@ public interface ActionManagerInterface {
 	public void deleteFile();
 	
 	public void newFile();
+	
+	public void comment();
 }

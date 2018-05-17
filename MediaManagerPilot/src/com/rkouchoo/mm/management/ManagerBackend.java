@@ -3,14 +3,18 @@ package com.rkouchoo.mm.management;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -32,7 +36,7 @@ import com.rkouchoo.mm.util.MessageUtil;
 public class ManagerBackend extends MediaManager {
 	
 	public ManagerBackend() {
-		super();
+		super(); // call the constructor of MediaManager.
 		messenger = new MessageUtil(uiPanel);
 		actionManager = new ActionManager(this, messenger);		
 	}
@@ -140,6 +144,7 @@ public class ManagerBackend extends MediaManager {
 				File file = (File) node.getUserObject();
 				if (file.isDirectory()) {
 					File[] files = fileSystemView.getFiles(file, true); // !!
+					currentDirectoryFiles = files; // update the current file list so commenting works.
 					if (node.isLeaf()) {
 						for (File child : files) {
 							if (child.isDirectory()) {
@@ -270,6 +275,34 @@ public class ManagerBackend extends MediaManager {
 	 * Create all of the button press listeners and make sure that they work.
 	 */
 	public void doButtonHandling() {
+		// use the 'esc' key to close the window.
+        uiPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel"); //$NON-NLS-1$
+            uiPanel.getActionMap().put("Cancel", new AbstractAction(){ //$NON-NLS-1$
+                public void actionPerformed(ActionEvent e) {
+                	System.out.println("Exiting window.");
+                	System.exit(1); // dont really need to exit gracefully. 
+                	// should add a check to see if we are waiting on json's to write out.
+                }
+            });
+		
+		
+		makeCommentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("opening a comment window.");
+				actionManager.comment();
+			}
+		});
+		
+		refreshButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("refresh call!");
+				uiPanel.repaint();
+			}
+		});
+		
 		TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent tse) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tse.getPath().getLastPathComponent();

@@ -1,19 +1,18 @@
 package com.rkouchoo.mm.file;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.rkouchoo.mm.Constants;
+import com.rkouchoo.mm.util.FileHash;
 import com.rkouchoo.mm.util.FileInformationSupplier;
 import com.rkouchoo.mm.util.MessageUtil;
 
@@ -31,7 +30,7 @@ public class FileKeyIndexer {
 	 * @param messenger
 	 */
 	public FileKeyIndexer(MessageUtil messenger) {
-		this.gson = new Gson();
+		this.gson = new GsonBuilder().setPrettyPrinting().create();
 		this.fileKeys = new ArrayList<String>();
 		this.messenger = messenger;
 	}
@@ -44,10 +43,7 @@ public class FileKeyIndexer {
 	 */
 	public List<String> indexFile(File[] files) throws Throwable {
 		for (int i = 0; files.length > i; i ++) {
-			Path f = Paths.get(files[i].getAbsolutePath());
-			BasicFileAttributes attrs = Files.readAttributes(f, BasicFileAttributes.class);
-			String fileUniqueKey = attrs.fileKey().toString();
-			
+			String fileUniqueKey = FileHash.getFileHash(files[i]);
 			fileKeys.add(fileUniqueKey); // add the file key to the list.
 		}
 		System.gc(); // hint at the compiler that i made a mess of objects and they kinda need to go
@@ -60,11 +56,13 @@ public class FileKeyIndexer {
 	 */
 	public String generateJSONString(List<String> fileIDList, List<String> comments) {
 		List<FileInformationSupplier> jsonList = new ArrayList<FileInformationSupplier>();
-		
-		for (String id : fileIDList) {
-			jsonList.add(new FileInformationSupplier(id, comments.iterator().next()));
-		}
 
+		for (int i = 1; i < fileIDList.size(); i++) {
+			String id = fileIDList.get(i);
+			String comment = comments.get(i);
+			jsonList.add(new FileInformationSupplier(id, comment));
+		}
+		
 		// convert the list to a big json string.
 		String jsonString = gson.toJson(jsonList);
 		
@@ -77,9 +75,11 @@ public class FileKeyIndexer {
 	 * @param jsonString
 	 */
 	public void writeOutJson(String path, String jsonString, boolean hidden) {
+		System.out.println("Writing file to cache");
 		try (Writer writer = new FileWriter(path + Constants.HIDDEN_FILE_NAME)) {
 		    Gson gson = new GsonBuilder().setPrettyPrinting().create(); // create the gson object with pretty prining
 		    gson.toJson(jsonString, writer);
+		    
 		    if (hidden) { // if the file is to be hidden make it.
 		    	makeHidden(path + Constants.HIDDEN_FILE_NAME);
 		    }

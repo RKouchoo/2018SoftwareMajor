@@ -10,6 +10,7 @@ public class ActionManager implements ActionManagerInterface {
 	private RenameFileAction rename;
 	private DeleteFileAction delete;
 	private NewFileAction newFile;
+	private CommentAction comment;
 	
 	private MessageUtil messenger;
 	
@@ -20,6 +21,7 @@ public class ActionManager implements ActionManagerInterface {
 		rename = new RenameFileAction(this);
 		delete = new DeleteFileAction(this);
 		newFile = new NewFileAction(this);
+		comment = new CommentAction(this);
 	}
 	
 	@Override
@@ -37,6 +39,11 @@ public class ActionManager implements ActionManagerInterface {
 		newFile.run();
 	}
 
+	@Override
+	public void comment() {
+		comment.run();
+	}
+	
 	@Override
 	public ManagerBackend getMediaManager() {
 		return manager;

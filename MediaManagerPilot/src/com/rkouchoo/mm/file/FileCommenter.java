@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rkouchoo.mm.Constants;
+import com.rkouchoo.mm.util.FileInformationSupplier;
 import com.rkouchoo.mm.util.MessageUtil;
 
 /**
@@ -12,7 +13,7 @@ import com.rkouchoo.mm.util.MessageUtil;
  * @author KOUC01
  *
  */
-public class FIleCommenter {
+public class FileCommenter {
 	
 	private FileKeyIndexer fileIndexer;
 	private MessageUtil messenger;
@@ -22,7 +23,7 @@ public class FIleCommenter {
 	private List<String> commentsList;
 	private String writeableString;
 	
-	public FIleCommenter(MessageUtil msg) {
+	public FileCommenter(MessageUtil msg) {
 		this.messenger = msg;
 		this.fileIndexer = new FileKeyIndexer(messenger);
 	}
@@ -36,6 +37,7 @@ public class FIleCommenter {
 	 */
 	public void doComment(File dir, File[] files, String fileKey, String comment) {
 		try {
+			System.out.println("Writing a comment!");
 			quickIndex(dir, files, fileKey, comment);
 		} catch (Throwable t) {
 			messenger.showErrorMessage("Failed to run doComment", "Commenting error");
@@ -74,6 +76,11 @@ public class FIleCommenter {
 		if (continueIndex) {
 			this.workingDirKeys = fileIndexer.indexFile(files);			
 			this.commentsList = generateCommentList(this.workingDirKeys, fileKey, comment);
+			
+			// need to convert these strings to joint object!!!!!
+			
+			
+			
 			this.writeableString = fileIndexer.generateJSONString(workingDirKeys, commentsList); // convert those lists to FileInformationSuppliers, then into a json string.
 			
 			fileIndexer.writeOutJson(dir.getAbsolutePath(), this.writeableString, Constants.MAKE_HIDDEN_FILES); // write out the json strings in the current directory
@@ -123,6 +130,14 @@ public class FIleCommenter {
 		} else {
 			messenger.showErrorMessage("Cannot save comment, already contains comment!", "Commenting error");
 		}
+	}
+	
+	private List<FileInformationSupplier> generateSupplierList(List<String> keys, List<String> comments) {
+		List<FileInformationSupplier> suppliers = new ArrayList<FileInformationSupplier>();
+		for (String key : keys) {
+			suppliers.add(new FileInformationSupplier(key, comments.iterator().next()));
+		}
+		return suppliers;
 	}
 	
 	/**

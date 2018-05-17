@@ -9,7 +9,5 @@ public interface FileKeyIndexerInterface {
 	public String getFileKey(File file);
 	
 	public File getFileFromKey(String key);
-	
-	
-	
+
 }

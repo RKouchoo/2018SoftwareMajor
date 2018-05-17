@@ -146,6 +146,10 @@ public class ManagerRunner extends ManagerBackend {
 			readable = new JCheckBox("Read  ");
 			writable = new JCheckBox("Write  ");
 			executable = new JCheckBox("Execute");
+			refreshButton = new JButton("      Refresh      ");
+			makeCommentButton = new JButton("Make a comment ");
+			removeCommentButton = new JButton("Remove Comment ");
+			clearAllCommentButton = new JButton("Remove all comments ");
 			
 			// add the elements to the toolbar
 			windowToolbar.add(openFile);
@@ -159,6 +163,12 @@ public class ManagerRunner extends ManagerBackend {
 			windowToolbar.add(readable);
 			windowToolbar.add(writable);
 			windowToolbar.add(executable);
+			windowToolbar.addSeparator();
+			windowToolbar.add(makeCommentButton);
+			windowToolbar.add(removeCommentButton);
+			windowToolbar.add(clearAllCommentButton);
+			windowToolbar.addSeparator();
+			windowToolbar.add(refreshButton);
 
 			JPanel fileView = new JPanel(new BorderLayout(3, 3));
 
