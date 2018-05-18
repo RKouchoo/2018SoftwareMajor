@@ -128,7 +128,7 @@ public class FileCommenter {
 		// check if using this method is valid.
 		if (keys.contains(key) && !comments.contains(comment)) {
 			int pos = keys.indexOf(key);
-			comments.add(pos, comment); // get the pos and then update the pos.			
+			comments.set(pos, comment); // get the pos and then update the pos.			
 			// generate the new json string and then write it out into the directory.
 			this.writeableString = fileIndexer.generateJSONString(keys, comments);
 			fileIndexer.writeOutJson(dir.getParentFile().getAbsolutePath() + "\\", this.writeableString, Constants.MAKE_HIDDEN_FILES);	

@@ -76,7 +76,7 @@ public class FileKeyIndexer {
 	 * @param jsonString
 	 */
 	public void writeOutJson(String path, String jsonString, boolean hidden) {
-		System.out.println("Writing file to cache" + path + Constants.HIDDEN_FILE_NAME);
+		System.out.println("Writing file to cache: " + path + Constants.HIDDEN_FILE_NAME);
 		try (Writer writer = new FileWriter(path + Constants.HIDDEN_FILE_NAME)) {
 		    Gson gson = new GsonBuilder().setPrettyPrinting().create(); // create the gson object with pretty prining
 		    JsonElement jsonElement = new JsonParser().parse(jsonString);

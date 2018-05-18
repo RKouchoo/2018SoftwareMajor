@@ -123,16 +123,18 @@ public class FileTableModel extends AbstractTableModel {
 			messenger.showErrorMessage("file key generation error", "cache error");
 		}
 		
-		for (String k : keys) {
-			System.out.println(k + "			" + key);
-		}
-		
 		if (comments == null || keys == null) {
 			System.out.println("No cache here, skipping");
 			return false;
 		} else {
 			if (keys.contains(key)) {
-				return true;
+				int pos = keys.indexOf(key);
+				
+				if (!"".equals(comments.get(pos))) {
+					return true;
+				}
+				
+				return false;
 			} else {
 				messenger.showErrorMessage("invalid cache file!", "cache error");
 				return false;

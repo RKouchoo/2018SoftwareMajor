@@ -34,7 +34,6 @@ public class FileCommentReader {
 		File test = new File(dir.getParentFile().toString() + "\\" + Constants.HIDDEN_FILE_NAME);
 		
 		if (!test.exists()) {
-			System.out.println("No cache found for this directory. Skipping!"  + test.getAbsolutePath());
 			return null;
 		}
 		
