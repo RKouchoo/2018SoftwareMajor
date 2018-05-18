@@ -57,8 +57,10 @@ public class FileCommenter {
 		String workingDir;
 		String currentDir;
 		
-		if (this.workingDir != null) {
-			currentDir = dir.getParentFile().getAbsolutePath() + "\\";
+		currentDir = dir.getParentFile().getAbsolutePath() + "\\";
+		File t = new File(currentDir);
+		
+		if (this.workingDir != null && t.exists()) {
 			workingDir = this.workingDir.getParentFile().getAbsolutePath() + "\\";
 			
 			if (currentDir.equals(workingDir)) {
