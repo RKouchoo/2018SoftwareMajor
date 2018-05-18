@@ -317,6 +317,8 @@ public class ManagerBackend extends MediaManager {
 			public void valueChanged(ListSelectionEvent lse) {
 				int row = table.getSelectionModel().getLeadSelectionIndex();
 				setFileDetails(((FileTableModel) table.getModel()).getFile(row));
+				
+				// run cache thingo here!
 			}
 		};
 		table.getSelectionModel().addListSelectionListener(listSelectionListener);

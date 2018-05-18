@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rkouchoo.mm.Constants;
-import com.rkouchoo.mm.util.FileInformationSupplier;
 import com.rkouchoo.mm.util.MessageUtil;
 
 /**

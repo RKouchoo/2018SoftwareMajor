@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rkouchoo.mm.Constants;
 import com.rkouchoo.mm.util.FileInformationSupplier;
 import com.rkouchoo.mm.util.MessageUtil;
 
@@ -28,7 +29,14 @@ public class FileCommentReader {
 	 * @return
 	 */
 	public FileCommentReader runAutomated(File dir) {
-		cleanUp(); // run the cleanup method, dont need to persistently store info.
+		cleanUp(); // run the cleanup method, dont need to store stuff in ram.
+		
+		File test = new File(dir.getParentFile().toString() + Constants.HIDDEN_FILE_NAME);
+		
+		if (!test.exists()) {
+			System.out.println("No cache found for this directory. Skipping!");
+			return null;
+		}
 		
 		try {
 			this.jsonString = reader.read(dir);

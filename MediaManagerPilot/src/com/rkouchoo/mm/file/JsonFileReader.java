@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.rkouchoo.mm.Constants;
 import com.rkouchoo.mm.util.FileInformationSupplier;
 
 public class JsonFileReader {
@@ -24,7 +25,7 @@ public class JsonFileReader {
 	 * @throws Throwable
 	 */
 	public String read(File path) throws Throwable {
-		 BufferedReader br = new BufferedReader(new FileReader(path.getAbsolutePath()));
+		 BufferedReader br = new BufferedReader(new FileReader(path.getParentFile() + Constants.HIDDEN_FILE_NAME));
 		    try {
 		        StringBuilder sb = new StringBuilder();
 		        String line = br.readLine();
