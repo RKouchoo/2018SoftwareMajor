@@ -25,7 +25,7 @@ public class JsonFileReader {
 	 * @throws Throwable
 	 */
 	public String read(File path) throws Throwable {
-		 BufferedReader br = new BufferedReader(new FileReader(path.getParentFile() + Constants.HIDDEN_FILE_NAME));
+		 BufferedReader br = new BufferedReader(new FileReader(path.getParentFile() + "\\" + Constants.HIDDEN_FILE_NAME));
 		    try {
 		        StringBuilder sb = new StringBuilder();
 		        String line = br.readLine();

@@ -29,6 +29,7 @@ import javax.swing.tree.TreePath;
 
 import com.rkouchoo.mm.Constants;
 import com.rkouchoo.mm.actions.ActionManager;
+import com.rkouchoo.mm.file.FileCommentReader;
 import com.rkouchoo.mm.file.FileTableModel;
 import com.rkouchoo.mm.util.ImageLoader;
 import com.rkouchoo.mm.util.MessageUtil;
@@ -39,6 +40,7 @@ public class ManagerBackend extends MediaManager {
 		super(); // call the constructor of MediaManager.
 		messenger = new MessageUtil(uiPanel);
 		actionManager = new ActionManager(this, messenger);		
+		commentReader = new FileCommentReader(messenger);
 	}
 	
 	/**
@@ -75,7 +77,7 @@ public class ManagerBackend extends MediaManager {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {			
 				if (fileTableModel == null) {
-					fileTableModel = new FileTableModel();
+					fileTableModel = new FileTableModel(messenger);
 					table.setModel(fileTableModel);
 				}
 
@@ -98,7 +100,8 @@ public class ManagerBackend extends MediaManager {
 					setColumnWidth(5, -1);
 					setColumnWidth(6, -1);
 					setColumnWidth(7, -1);
-					setColumnWidth(8, 180);
+					setColumnWidth(8, -1);
+					setColumnWidth(9, 180);
 					
 					haveCellSizesBeenSet = true;
 				}

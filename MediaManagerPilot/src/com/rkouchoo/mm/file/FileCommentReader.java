@@ -31,10 +31,10 @@ public class FileCommentReader {
 	public FileCommentReader runAutomated(File dir) {
 		cleanUp(); // run the cleanup method, dont need to store stuff in ram.
 		
-		File test = new File(dir.getParentFile().toString() + Constants.HIDDEN_FILE_NAME);
+		File test = new File(dir.getParentFile().toString() + "\\" + Constants.HIDDEN_FILE_NAME);
 		
 		if (!test.exists()) {
-			System.out.println("No cache found for this directory. Skipping!");
+			System.out.println("No cache found for this directory. Skipping!"  + test.getAbsolutePath());
 			return null;
 		}
 		

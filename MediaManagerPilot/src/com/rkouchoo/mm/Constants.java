@@ -19,7 +19,8 @@ public class Constants {
 			"Last Modified", 
 			"R", 
 			"W", 
-			"E", 
+			"E",
+			"C",
 			"Size (bytes)"
 	};
 	

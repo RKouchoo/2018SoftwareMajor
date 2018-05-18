@@ -10,6 +10,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 
 import com.rkouchoo.mm.actions.ActionManager;
+import com.rkouchoo.mm.file.FileCommentReader;
 import com.rkouchoo.mm.file.FileTableModel;
 import com.rkouchoo.mm.util.MessageUtil;
 
@@ -75,6 +76,7 @@ public class MediaManager {
 	 */
 	protected ActionManager actionManager;
 	protected MessageUtil messenger;
+	protected FileCommentReader commentReader;
 	
 	protected boolean haveCellSizesBeenSet = false;
 	
