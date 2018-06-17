@@ -10,6 +10,12 @@ public class DeleteFileAction implements ActionInterface{
 	
 	ActionManager manager;
 	
+	
+	/**
+	 * File deletion is currently disabled due to it be unstable and not working properly.
+	 * Second revision will include file deletion.
+	 * @param man
+	 */
 	public DeleteFileAction(ActionManager man) {
 		this.manager = man;
 	}
@@ -21,8 +27,13 @@ public class DeleteFileAction implements ActionInterface{
 			return;
 		}
 
-		int result = JOptionPane.showConfirmDialog(manager.getMediaManager().uiPanel, "Are you sure you want to delete this file?", "Delete File",
-				JOptionPane.ERROR_MESSAGE);
+		//int result = JOptionPane.showConfirmDialog(manager.getMediaManager().uiPanel, "Are you sure you want to delete this file?", "Delete File",
+			//	JOptionPane.ERROR_MESSAGE);
+		
+		JOptionPane.showMessageDialog(manager.getMediaManager().uiPanel, "File Deletion is currently disabled. sorry!", "Delete File", JOptionPane.ERROR_MESSAGE);
+		
+		
+		/*
 		if (result == JOptionPane.OK_OPTION) {
 			try {
 				System.out.println("currentFile: " + manager.getMediaManager().currentFile);
@@ -52,6 +63,7 @@ public class DeleteFileAction implements ActionInterface{
 				manager.getMessenger().showThrowable(t);
 			}
 		}
+		*/
 		manager.getMediaManager().uiPanel.repaint();
 	}
 }
