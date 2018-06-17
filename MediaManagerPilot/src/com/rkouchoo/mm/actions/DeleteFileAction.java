@@ -21,9 +21,12 @@ public class DeleteFileAction implements ActionInterface{
 			return;
 		}
 
-		int result = JOptionPane.showConfirmDialog(manager.getMediaManager().uiPanel, "Are you sure you want to delete this file?", "Delete File",
-				JOptionPane.ERROR_MESSAGE);
-		if (result == JOptionPane.OK_OPTION) {
+		//int result = JOptionPane.showConfirmDialog(manager.getMediaManager().uiPanel, "Are you sure you want to delete this file?", "Delete File",
+		//	JOptionPane.ERROR_MESSAGE);
+	
+		JOptionPane.showMessageDialog(manager.getMediaManager().uiPanel, "File Deletion is currently disabled. sorry!", "Delete File", JOptionPane.ERROR_MESSAGE);
+		
+		/* if (result == JOptionPane.OK_OPTION) {
 			try {
 				System.out.println("currentFile: " + manager.getMediaManager().currentFile);
 				TreePath parentPath = manager.getMediaManager().findTreePath(manager.getMediaManager().currentFile.getParentFile());
@@ -53,7 +56,7 @@ public class DeleteFileAction implements ActionInterface{
 			} catch (Throwable t) {
 				manager.getMessenger().showThrowable(t);
 			}
-		}
+		} */
 		manager.getMediaManager().uiPanel.repaint();
 	}
 }

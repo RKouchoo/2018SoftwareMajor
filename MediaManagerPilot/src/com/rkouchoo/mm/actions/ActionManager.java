@@ -11,6 +11,7 @@ public class ActionManager implements ActionManagerInterface {
 	private DeleteFileAction delete;
 	private NewFileAction newFile;
 	private CommentAction comment;
+	private ViewCommentAction viewComment;
 	
 	private MessageUtil messenger;
 	
@@ -22,6 +23,7 @@ public class ActionManager implements ActionManagerInterface {
 		delete = new DeleteFileAction(this);
 		newFile = new NewFileAction(this);
 		comment = new CommentAction(this);
+		viewComment = new ViewCommentAction(this);
 	}
 	
 	@Override
@@ -45,6 +47,11 @@ public class ActionManager implements ActionManagerInterface {
 	}
 	
 	@Override
+	public void viewComment() {
+		viewComment.run();
+	}
+	
+	@Override
 	public ManagerBackend getMediaManager() {
 		return manager;
 	}
@@ -54,4 +61,5 @@ public class ActionManager implements ActionManagerInterface {
 		return messenger;
 	}
 
+	
 }

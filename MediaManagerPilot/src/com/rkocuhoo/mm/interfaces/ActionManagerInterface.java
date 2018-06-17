@@ -20,4 +20,6 @@ public interface ActionManagerInterface {
 	public void newFile();
 	
 	public void comment();
+	
+	public void viewComment();
 }
