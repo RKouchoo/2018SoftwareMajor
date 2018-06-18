@@ -61,7 +61,7 @@ public class MediaManager {
 	protected JButton refreshButton;
 	protected JButton makeCommentButton;
 	protected JButton removeCommentButton;
-	protected JButton clearAllCommentButton;
+	protected JButton viewCommentButton;
 
 	public JPanel newFilePanel;
 	public JPanel commentPanel;

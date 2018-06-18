@@ -289,6 +289,13 @@ public class ManagerBackend extends MediaManager {
                 }
             });
 		
+         
+        viewCommentButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionManager.viewComment();
+			}
+		});
 		
 		makeCommentButton.addActionListener(new ActionListener() {
 			@Override

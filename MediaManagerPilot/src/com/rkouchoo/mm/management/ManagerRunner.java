@@ -149,7 +149,7 @@ public class ManagerRunner extends ManagerBackend {
 			refreshButton = new JButton("      Refresh      ");
 			makeCommentButton = new JButton("Make a comment ");
 			removeCommentButton = new JButton("Remove Comment ");
-			clearAllCommentButton = new JButton("Remove all comments ");
+			viewCommentButton = new JButton("View comment");
 			
 			// add the elements to the toolbar
 			windowToolbar.add(openFile);
@@ -166,7 +166,7 @@ public class ManagerRunner extends ManagerBackend {
 			windowToolbar.addSeparator();
 			windowToolbar.add(makeCommentButton);
 			windowToolbar.add(removeCommentButton);
-			windowToolbar.add(clearAllCommentButton);
+			windowToolbar.add(viewCommentButton);
 			windowToolbar.addSeparator();
 			windowToolbar.add(refreshButton);
 

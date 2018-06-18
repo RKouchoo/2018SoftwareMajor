@@ -42,7 +42,7 @@ public class CommentAction implements ActionInterface {
 		File dir = manager.getMediaManager().currentFile;
 		
 		if (dir == null) {
-			manager.getMessenger().showErrorMessage("Unhandled directory exception!" , "Commentig error");
+			manager.getMessenger().showErrorMessage("Unhandled directory exception!" , "Commenting error");
 			return;
 		}
 			
