@@ -1,4 +1,4 @@
-package com.rkocuhoo.mm.interfaces;
+package com.rkouchoo.mm.interfaces;
 
 import java.io.File;
 

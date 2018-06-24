@@ -1,6 +1,6 @@
 package com.rkouchoo.mm.actions;
 
-import com.rkocuhoo.mm.interfaces.ActionManagerInterface;
+import com.rkouchoo.mm.interfaces.ActionManagerInterface;
 import com.rkouchoo.mm.management.ManagerBackend;
 import com.rkouchoo.mm.util.MessageUtil;
 

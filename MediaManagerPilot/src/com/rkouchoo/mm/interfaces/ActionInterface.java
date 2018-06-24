@@ -1,4 +1,4 @@
-package com.rkocuhoo.mm.interfaces;
+package com.rkouchoo.mm.interfaces;
 
 /**
  * An interface that every action implements to make calling more uniform.

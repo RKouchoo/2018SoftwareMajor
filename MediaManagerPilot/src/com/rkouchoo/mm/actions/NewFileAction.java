@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.rkocuhoo.mm.interfaces.ActionInterface;
+import com.rkouchoo.mm.interfaces.ActionInterface;
 
 /**
  * Messy logic that needs to be cleaned up at some time.

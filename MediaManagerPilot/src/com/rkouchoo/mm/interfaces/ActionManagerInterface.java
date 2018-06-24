@@ -1,4 +1,4 @@
-package com.rkocuhoo.mm.interfaces;
+package com.rkouchoo.mm.interfaces;
 
 import com.rkouchoo.mm.management.MediaManager;
 import com.rkouchoo.mm.util.MessageUtil;

@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import com.rkocuhoo.mm.interfaces.ActionInterface;
+import com.rkouchoo.mm.interfaces.ActionInterface;
 
 public class DeleteFileAction implements ActionInterface{
 	

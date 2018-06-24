@@ -10,8 +10,8 @@ import javax.swing.JTextField;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.rkocuhoo.mm.interfaces.ActionInterface;
 import com.rkouchoo.mm.file.FileCommenter;
+import com.rkouchoo.mm.interfaces.ActionInterface;
 import com.rkouchoo.mm.util.FileHash;
 
 public class CommentAction implements ActionInterface {

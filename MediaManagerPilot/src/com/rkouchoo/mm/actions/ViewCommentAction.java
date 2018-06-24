@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-import com.rkocuhoo.mm.interfaces.ActionInterface;
 import com.rkouchoo.mm.file.FileCommentReader;
+import com.rkouchoo.mm.interfaces.ActionInterface;
 import com.rkouchoo.mm.util.FileHash;
 
 public class ViewCommentAction implements ActionInterface {
