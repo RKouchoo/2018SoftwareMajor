@@ -2,8 +2,8 @@ package com.rkouchoo.mm.actions;
 
 import java.io.File;
 import java.util.List;
-
 import javax.swing.JOptionPane;
+
 import com.rkocuhoo.mm.interfaces.ActionInterface;
 import com.rkouchoo.mm.file.FileCommentReader;
 import com.rkouchoo.mm.util.FileHash;
@@ -59,5 +59,6 @@ public class ViewCommentAction implements ActionInterface {
 		} else {
 			JOptionPane.showMessageDialog(manager.getMediaManager().uiPanel, "No comment exists for this file!", "Comment view", JOptionPane.ERROR_MESSAGE);
 		}
+		
 	}
 }

@@ -13,7 +13,7 @@ public class ImageLoader {
 	static public ArrayList<Image> loadIconImages(MediaManager fileManager, String path) throws Exception {
 	
 		URL urlBig = fileManager.getClass().getResource(path);
-		URL urlSmall = fileManager.getClass().getResource(path);
+		URL urlSmall = fileManager.getClass().getResource(path); // both the same image, doesnt really matter
 		ArrayList<Image> images = new ArrayList<Image>();
 		
 		images.add(ImageIO.read(urlBig));

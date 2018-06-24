@@ -35,7 +35,7 @@ public class ManagerRunner extends ManagerBackend {
 	}
 
 	/**
-	 * TODO, most of this should be done in the backend anyway....
+	 * Much procedural code constructing the objects for the window.
 	 * @return
 	 */
 	public Container getUIPanel() {

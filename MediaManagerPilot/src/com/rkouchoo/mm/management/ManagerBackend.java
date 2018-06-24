@@ -71,11 +71,12 @@ public class ManagerBackend extends MediaManager {
 
 	/**
 	 * Updates the table from the new array of Files[]
+	 * 
 	 * @param files
 	 */
 	private void setTableData(final File[] files) {
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {			
+			public void run() {
 				if (fileTableModel == null) {
 					fileTableModel = new FileTableModel(messenger);
 					table.setModel(fileTableModel);
@@ -84,7 +85,7 @@ public class ManagerBackend extends MediaManager {
 				table.getSelectionModel().removeListSelectionListener(listSelectionListener);
 				fileTableModel.setFiles(files);
 				table.getSelectionModel().addListSelectionListener(listSelectionListener);
-				
+
 				// If the cells have not been sized properly, do it now.
 				if (!haveCellSizesBeenSet) {
 					Icon icon = fileSystemView.getSystemIcon(files[0]);
@@ -102,10 +103,10 @@ public class ManagerBackend extends MediaManager {
 					setColumnWidth(7, -1);
 					setColumnWidth(8, -1);
 					setColumnWidth(9, 180);
-					
+
 					haveCellSizesBeenSet = true;
 				}
-				
+
 			}
 		});
 	}

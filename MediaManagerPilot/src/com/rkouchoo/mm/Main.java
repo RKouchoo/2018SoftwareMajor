@@ -20,12 +20,12 @@ public class Main {
 				
 				JFrame frame = new JFrame(Constants.WINDOW_TITLE);
 				mediaManager.setSystemLookAndFeel();
-				mediaManager.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PROJECT_PATH);
+				mediaManager.setWindowIconImage(frame, mediaManager, Constants.WINDOW_ICON_PATH);
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
 				frame.setContentPane(((ManagerRunner) mediaManager).getUIPanel());
 				
 				mediaManager.showRootFile();
-
+				
 				frame.pack();
 				frame.setLocationByPlatform(Constants.WINDOW_NATIVE_LOCATION);
 				frame.setMinimumSize(frame.getSize());

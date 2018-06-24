@@ -1,5 +1,5 @@
 package com.rkouchoo.mm.file;
-
+	
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,6 @@ import com.rkouchoo.mm.util.MessageUtil;
 /**
  * A class that uses the methods of FileKeyIndexer to generate proper lists for user write out.
  * @author KOUC01
- *
  */
 public class FileCommenter {
 	
@@ -57,8 +56,9 @@ public class FileCommenter {
 		String workingDir;
 		String currentDir;
 		
-		currentDir = dir.getParentFile().getAbsolutePath() + "\\";
+		currentDir = dir.getParentFile().getAbsolutePath() + "\\" + Constants.HIDDEN_FILE_NAME;
 		File t = new File(currentDir);
+		System.out.println(t.toString());
 		
 		if (this.workingDir != null && t.exists()) {
 			workingDir = this.workingDir.getParentFile().getAbsolutePath() + "\\";
@@ -117,7 +117,7 @@ public class FileCommenter {
 		}
 		return comments;
 	}
-
+	
 	/**
 	 * Updates pre existing lists then writes it out to a file.
 	 * @param keys = ArrayList of keys
@@ -127,6 +127,10 @@ public class FileCommenter {
 	 * @param dir = the current working directory
 	 */
 	private void updateLists(List<String> keys, List<String> comments, String key, String comment, File dir) {
+		for (String s : comments) {
+			System.out.println(s);
+		}
+		
 		// check if using this method is valid.
 		if (keys.contains(key) && !comments.contains(comment)) {
 			int pos = keys.indexOf(key);

@@ -35,6 +35,11 @@ public class MessageUtil {
 		throwableError.printStackTrace();
 	}
 	
+	/**
+	 * Checks if the panel has been created
+	 * @param panel
+	 * @return
+	 */
 	private boolean checkPanel(JPanel panel) {
 		if (panel == null) {
 			return false;
